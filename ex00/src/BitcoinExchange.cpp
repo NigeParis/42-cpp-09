@@ -6,7 +6,7 @@
 /*   By: nrobinso <nrobinso@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 08:56:33 by nrobinso          #+#    #+#             */
-/*   Updated: 2025/04/28 16:55:35 by nrobinso         ###   ########.fr       */
+/*   Updated: 2025/04/28 17:41:58 by nrobinso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,38 @@ static size_t findComma(std::string line) {
     return (commapos);  
 };
 
+void DateAndRate::getDate(std::string line) {
+
+    int dashone = 0;
+    int dashtwo = 0;
+    int comma = 0;
+              
+    dashone = findDashOne(line);
+    dashtwo = findDashTwo(line);
+    comma = findComma(line);    
+    this->year_ = atoi(line.substr(0, dashone).c_str());
+    this->month_ = atoi(line.substr(5, dashtwo - 5).c_str());
+    this->day_ = atoi(line.substr(dashtwo + 1, 2).c_str());
+};
+
+void DateAndRate::getDateLong(void) {
+    
+    std::ostringstream datecode_;
+    std::string temp;
+    
+    datecode_ << year_;
+    if (month_ < 10)
+        datecode_ << 0 << month_;
+    else     
+        datecode_ << month_;
+    if (day_ < 10)
+        datecode_ << 0 << day_;
+    else     
+        datecode_ << day_;
+    temp = datecode_.str();
+    this->datelong_ = atoi(temp.c_str());
+};
+
 
 
 DateAndRate::DateAndRate() {
@@ -81,13 +113,10 @@ DateAndRate::DateAndRate() {
     
     std::string line;
     int lineNumber = 0;
-    int dashone = 0;
-    int dashtwo = 0;
-    int comma = 0;
-        
+ 
     while (std::getline(inputdatafile, line)) {
         data[lineNumber] = line; // Add the line to the map with the current line number as the key
-        if (lineNumber == 198) {
+        if (lineNumber < 198 && lineNumber > 0) {
                 
             if (!isCommasDashDataCheck(line)) {
                 std::cout << "Error: data format [xxxx-xx-xx,x] " << line << std::endl;
@@ -97,22 +126,17 @@ DateAndRate::DateAndRate() {
                 std::cout << "Error: format year [XXXX] " << line << std::endl;
                 return ;
             }
-                
-            dashone = findDashOne(data[lineNumber]);
-            dashtwo = findDashTwo(data[lineNumber]);
-            comma = findComma(data[lineNumber]);
-            
-                
-            this->year_ = atoi(data[lineNumber].substr(0, dashone).c_str());
-            this->month_ = atoi(data[lineNumber].substr(5, dashtwo - 5).c_str());
-            this->day_ = atoi(data[lineNumber].substr(dashtwo + 1, 2).c_str());
-
-                
+        
+            getDate(line);
+            getDateLong();
+    
+         
+        
+            std::cout << "datelong: " << datelong_ << std::endl; // Output: "20130101"
+                 
             std::cout << "Key: " << lineNumber << ", Value: " << line << " Y: " << data[lineNumber].substr(0,4) 
             << " M: "<< data[lineNumber].substr(5,2) << " D: "<< data[lineNumber].substr(8,2) 
-            << " dash1: " <<  dashone
-            << " dash2: " <<  dashtwo
-            << " comma: " <<  comma << std::endl;
+            << std::endl;
                 
                 
                 

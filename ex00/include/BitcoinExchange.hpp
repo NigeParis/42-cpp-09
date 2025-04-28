@@ -6,7 +6,7 @@
 /*   By: nrobinso <nrobinso@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 08:55:47 by nrobinso          #+#    #+#             */
-/*   Updated: 2025/04/28 15:40:44 by nrobinso         ###   ########.fr       */
+/*   Updated: 2025/04/28 17:36:48 by nrobinso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <string>
 #include <map>
 #include <cstdlib>
-
+#include <sstream> // Required for std::ostringstream in C++98
 
 class Date {
 
@@ -25,6 +25,7 @@ class Date {
 
     protected:
 
+        unsigned int  datelong_;
         unsigned int  year_;
         unsigned int  month_;
         unsigned int  day_;
@@ -37,6 +38,10 @@ class DateAndRate: public Date {
 
         DateAndRate();
         ~DateAndRate(void);
+        
+        void getDate(std::string line);
+        void getDateLong(void);
+
 
 
     private:
