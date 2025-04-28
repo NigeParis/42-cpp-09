@@ -1,7 +1,7 @@
 ###############################################################################
 ## ARGUMENTS
 
-NAME= bitcoinexchange
+NAME= btc
 CXXFLAGS=  -Wall -Wextra -Werror -std=c++98
 
 SRCS=$(addprefix $(SRC_DIR), $(SRC))
@@ -16,7 +16,7 @@ CXX=c++
 
 
 SRC_DIR = src/
-SRC = main.cpp
+SRC = main.cpp BitcoinExchange.cpp
 
 OBJ_DIR = build/
 
