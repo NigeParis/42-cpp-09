@@ -6,7 +6,7 @@
 /*   By: nige42 <nige42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 08:56:33 by nrobinso          #+#    #+#             */
-/*   Updated: 2025/04/29 17:59:12 by nige42           ###   ########.fr       */
+/*   Updated: 2025/04/30 00:01:13 by nige42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,12 @@
 
 void  printMap(std::map<int, std::string> &data) {
     for (std::map<int, std::string>::const_iterator it = data.begin(); it != data.end(); ++it) {
+        std::cout << it->first << " -> " << it->second << std::endl;
+    }    
+};
+
+void  printDay(std::map<int, unsigned int> &jour_) {
+    for (std::map<int, unsigned int>::const_iterator it = jour_.begin(); it != jour_.end(); ++it) {
         std::cout << it->first << " -> " << it->second << std::endl;
     }    
 };
@@ -141,23 +147,38 @@ DateAndRate::DateAndRate() {
                 isYearFormatDataCheck(line);
             }
             catch(std::out_of_range &e ) {
-                std::cerr << e.what() << line << std::endl
-                << std::endl;
+                std::cerr << e.what() << line << std::endl;
+              //  << std::endl;
                 continue ;   
             }
             
             getDateValue(line);
             getDateLong();
            // printDebug(datelong_, line);
-            data[datelong_] = line; // Add the line to the map with the current line number as the key
-            
+
+           if (this->day_ < 0 || this->day_ > 31)
+                continue;
+
+            std::cout << datelong_ << " => " << rate_ << std::endl;
+           
+            data_[datelong_] = line; // Add the line to the map with the current line number as the key
+            Year_[datelong_] = year_;
+            Month_[datelong_] = month_;
+            Day_[datelong_] = day_;
+            Rate_[datelong_] = rate_;
     
         }
         ++lineNumber;
     }
     // Add file processing logic here if needed
 
-    printMap(data);
+    std::cout << std::endl;
+    printMap(data_);
+    printDay(Day_);
+
+    std::cout << data_[20101007] << " => " 
+    << Day_[20101007] 
+    << std::endl;
     inputdatafile.close();
 };
 

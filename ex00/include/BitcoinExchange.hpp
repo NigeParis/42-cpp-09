@@ -6,7 +6,7 @@
 /*   By: nige42 <nige42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 08:55:47 by nrobinso          #+#    #+#             */
-/*   Updated: 2025/04/29 17:40:56 by nige42           ###   ########.fr       */
+/*   Updated: 2025/04/29 23:55:24 by nige42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,10 @@ class DateAndRate: public Date {
 
     private:
     
-        std::map<int, std::string> data;
+        std::map<int, std::string> data_;
+        std::map<int, unsigned int> Year_;
+        std::map<int, unsigned int> Month_;
+        std::map<int, unsigned int> Day_;
+        std::map<int, float> Rate_;
     
 };
