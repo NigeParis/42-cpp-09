@@ -6,7 +6,7 @@
 /*   By: nige42 <nige42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 08:55:47 by nrobinso          #+#    #+#             */
-/*   Updated: 2025/04/29 13:43:14 by nige42           ###   ########.fr       */
+/*   Updated: 2025/04/29 17:40:56 by nige42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,11 @@ class DateAndRate: public Date {
         DateAndRate();
         ~DateAndRate(void);
         
-        void getDateValue(std::string line);
+        void getDateValue(std::string &line);
         void getDateLong(void);
 
 
-        void printDebug(int lineNumber, std::string line);
+        void printDebug(int lineNumber, std::string &line);
 
     private:
     
