@@ -6,7 +6,7 @@
 /*   By: nige42 <nige42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 08:56:33 by nrobinso          #+#    #+#             */
-/*   Updated: 2025/04/29 17:47:26 by nige42           ###   ########.fr       */
+/*   Updated: 2025/04/29 17:59:12 by nige42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,7 @@ DateAndRate::DateAndRate() {
     int lineNumber = 0;
  
     while (std::getline(inputdatafile, line)) {
-        if (lineNumber < 201 && lineNumber > 190) {
+        if (lineNumber < 220 && lineNumber > 190) {
 
             try {
                 isDigits(line);
