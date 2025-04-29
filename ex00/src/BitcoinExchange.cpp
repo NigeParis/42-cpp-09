@@ -3,14 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   BitcoinExchange.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nrobinso <nrobinso@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nige42 <nige42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 08:56:33 by nrobinso          #+#    #+#             */
-/*   Updated: 2025/04/28 17:41:58 by nrobinso         ###   ########.fr       */
+/*   Updated: 2025/04/29 13:46:43 by nige42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/BitcoinExchange.hpp"
+
+
+Date::Date() {};
+Date::~Date(void) {};
 
 static bool isYearFormatDataCheck(std::string line) {
     std::string year;
@@ -66,7 +70,7 @@ static size_t findComma(std::string line) {
     return (commapos);  
 };
 
-void DateAndRate::getDate(std::string line) {
+void DateAndRate::getDateValue(std::string line) {
 
     int dashone = 0;
     int dashtwo = 0;
@@ -78,6 +82,7 @@ void DateAndRate::getDate(std::string line) {
     this->year_ = atoi(line.substr(0, dashone).c_str());
     this->month_ = atoi(line.substr(5, dashtwo - 5).c_str());
     this->day_ = atoi(line.substr(dashtwo + 1, 2).c_str());
+    this->rate_ = atof(line.substr(comma + 1).c_str());
 };
 
 void DateAndRate::getDateLong(void) {
@@ -127,22 +132,11 @@ DateAndRate::DateAndRate() {
                 return ;
             }
         
-            getDate(line);
+            getDateValue(line);
             getDateLong();
-    
+            printDebug(lineNumber, line);
          
-        
-            std::cout << "datelong: " << datelong_ << std::endl; // Output: "20130101"
-                 
-            std::cout << "Key: " << lineNumber << ", Value: " << line << " Y: " << data[lineNumber].substr(0,4) 
-            << " M: "<< data[lineNumber].substr(5,2) << " D: "<< data[lineNumber].substr(8,2) 
-            << std::endl;
-                
-                
-                
-            std::cout << "year: " << year_;
-            std::cout << " month: " << month_;
-            std::cout << " day: " << day_ << std::endl;
+    
         }
         ++lineNumber;
     }
@@ -150,11 +144,28 @@ DateAndRate::DateAndRate() {
 
     
     inputdatafile.close();
-}
-
-
-
-
-DateAndRate::~DateAndRate() {
-
 };
+
+
+
+
+void DateAndRate::printDebug(int lineNumber, std::string line) {
+
+    
+    std::cout << "datelong: " << datelong_ // Output: "20130101"
+    << " Key: " << lineNumber << ", Value: " << line << " Y: " << data[lineNumber].substr(0,4) 
+    << " M: "<< data[lineNumber].substr(5,2) << " D: "<< data[lineNumber].substr(8,2) 
+    << std::endl;
+        
+        
+        
+    std::cout << "year: " << year_;
+    std::cout << " month: " << month_;
+    std::cout << " day: " << day_;
+    std::cout << " rate: " << rate_ 
+    << std::endl << std::endl;
+    
+};
+
+
+DateAndRate::~DateAndRate() {};
