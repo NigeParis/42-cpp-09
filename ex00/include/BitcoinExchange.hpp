@@ -6,7 +6,7 @@
 /*   By: nige42 <nige42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 08:55:47 by nrobinso          #+#    #+#             */
-/*   Updated: 2025/04/30 14:01:33 by nige42           ###   ########.fr       */
+/*   Updated: 2025/04/30 16:05:18 by nige42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,9 @@ class BitcoinExchange: public Date {
         ~BitcoinExchange(void);
 
         void getAndCheckData(void);
+        void getInputFile(char *argv);
 
-        
+        int findKeyOrNearest(int key);
         
         
         void printDebug(int lineNumber, std::string &line);

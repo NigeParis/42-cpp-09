@@ -6,7 +6,7 @@
 /*   By: nige42 <nige42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 08:56:33 by nrobinso          #+#    #+#             */
-/*   Updated: 2025/04/30 14:50:06 by nige42           ###   ########.fr       */
+/*   Updated: 2025/04/30 16:44:49 by nige42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,40 +102,24 @@ static size_t findComma(std::string &line) {
     return (commapos); 
 };
 
-void  BitcoinExchange::print(void) {
-    
-    std::cout << "Display all valid: database inputs" << std::endl;
-    for (std::map<int,  std::string>::const_iterator it = data_.begin(); it != data_.end(); ++it) {
-        std::cout << "key [ "<< it->first << " ] -> " << std::left << std::setw(20) << it->second 
-        << " => " << Year_[it->first];
-        if(Month_ [it->first]< 10)
-            std::cout << "-0" << std::setw(1) << Month_[it->first];
-        else
-            std::cout << "-" << std::setw(2) << Month_[it->first];
-        if(Day_ [it->first]< 10)
-            std::cout << "-0" << std::setw(1) << Day_[it->first];
-        else
-            std::cout << "-" << std::setw(2) << Day_[it->first];
 
-        std::cout << " => Rate: " << std::setw(-8)  << Rate_[it->first];
 
-        std::cout << std::endl;
-    }    
-};
+int BitcoinExchange::findKeyOrNearest(int key) {
 
-void BitcoinExchange::print(int key) {
-
-    std::cout << "Display a valid: database input" << std::endl;
+    std::cout << "Find Key: from database input" << std::endl;
     int Key = 0;
+
+    if (key < 10000000 || key > 99999999) 
+        throw std::out_of_range("Error: database key invalid");
     
     for (std::map<int,  std::string>::const_iterator itc = data_.begin(); itc != data_.end(); ++itc) {    
         Key = itc->first;
         std::map<int,  std::string>::const_iterator itp = data_.begin();
         if (key < itp->first ) {
-            throw std::out_of_range("Error: not found in database => ");
+            throw std::out_of_range("Error: not found in database");
         }
         if (Key == 0)
-            throw std::out_of_range("Error: empty database => ");
+            throw std::out_of_range("Error: empty database ");
         if (Key == key) {
             Key = itc->first;
             break;
@@ -145,24 +129,11 @@ void BitcoinExchange::print(int key) {
             Key = itc->first;
             break;  
         }
-        
     }    
     if (Key == 0)
         throw std::out_of_range("Error: empty database");    
-    std::cout << "key [ "<< Key << " ] -> " << std::left << std::setw(20) << Line_ [Key]
-    << " => " << Year_[Key];
-    if(Month_ [Key]< 10)
-        std::cout << "-0" << std::setw(1) << Month_[Key];
-    else
-        std::cout << "-" << std::setw(2) << Month_[Key];
-    if(Day_ [Key]< 10)
-        std::cout << "-0" << std::setw(1) << Day_[Key];
-    else
-        std::cout << "-" << std::setw(2) << Day_[Key];
-        std::cout << " => Rate: " << std::setw(-8)  << Rate_[Key];
-        std::cout << std::endl;
+    return (key);
 };
-
 
 void BitcoinExchange::getDateValue(std::string &line) {
 
@@ -210,75 +181,105 @@ static  std::ifstream openfile(std::string const &file) {
 
 
 
+
 void BitcoinExchange::getAndCheckData(void) {
     std::cout << "getAndCheckData() called" << std::endl;
     
     std::string line;
     int lineNumber = 0;
     std::ifstream inputdatafile;
+    int errorsFound = 0;
         
     try {
         inputdatafile = openfile(DATABASE);
-        
     }
     catch(std::exception &e) {
         std::cerr << e.what() << line << std::endl;
         return;
     }
-    
     while (std::getline(inputdatafile, line)) {
-        if (lineNumber > 0) {
-            
+        if (lineNumber > 0) {       
             try {
+                errorsFound++;
                 isDigits(line);
                 isCommasDashDataCheck(line);
                 isYearFormatDataCheck(line);
+                errorsFound--;
+                
             }
             catch(std::out_of_range &e ) {
+                if (errorsFound == 1)
+                    std::cout << "Liste des errors in dataBase found" << std::endl;
                 std::cerr << e.what() << line << std::endl;
                 continue ;   
             }
-            
             getDateValue(line);
             getDateLong();
-            // printDebug(datelong_, line);
-            
             try {
+                errorsFound++;
                 isValidDate(this->year_, this->month_, this->day_);
                 ssize_t safeRate = static_cast<ssize_t>(rate_);
                 isRateValid(safeRate);
+                errorsFound--;
             }
             catch(std::out_of_range &e ) {
+                if (errorsFound == 1)
+                    std::cout << "Liste des errors in dataBase found" << std::endl;
                 std::cerr << e.what() << line << std::endl;
                 continue ;   
             }
-            
-            
-            
             data_[datelong_] = line; // Add the line to the map with the current line number as the key
             Line_[datelong_] = line; // Add the line to the map with the current line number as the key
             Year_[datelong_] = year_;
             Month_[datelong_] = month_;
             Day_[datelong_] = day_;
             Rate_[datelong_] = rate_;
-            
         }
         ++lineNumber;
     }
-    
-    std::cout << std::endl;
-    //print();
     try {
-        print(20090102);
+        std::cout << std::endl;
+        //print();
+        //print(20100102);
+        //std::cout << BitcoinExchange::Rate_[findKeyOrNearest(20100102)] << std::endl;
     }
     catch(std::out_of_range &e ) {
         std::cerr << e.what() << line << std::endl;
     }
-    
     inputdatafile.close();
 };
 
 
+void BitcoinExchange::getInputFile(char *str) {
+
+    std::ifstream inputfile; 
+    std::string line;
+
+    try {
+        inputfile = openfile(str);
+    }
+    catch(std::exception &e) {
+        std::cerr << e.what() << std::endl;
+        return;
+    }
+    try {
+      
+        while (std::getline(inputfile, line)) {
+            std::cout << line << std::endl;
+        
+
+
+
+            
+        
+        }
+    }
+    catch (std::exception &e) {
+        std::cerr << e.what() << std::endl;
+    }
+    
+    inputfile.close();
+}
 
 
 
@@ -296,6 +297,12 @@ void BitcoinExchange::getAndCheckData(void) {
 
 
 
+
+BitcoinExchange::BitcoinExchange() {std::cout << "default BitcoinExchange constructor" << std::endl;};
+BitcoinExchange::~BitcoinExchange() {std::cout << "default destructor" << std::endl;};
+
+
+//DEBUG FUNCTIONS
 void BitcoinExchange::printDebug(int lineNumber, std::string &line) {
     
     
@@ -314,6 +321,64 @@ void BitcoinExchange::printDebug(int lineNumber, std::string &line) {
     
 };
 
+void  BitcoinExchange::print(void) {
+    
+    std::cout << "Display all valid: database inputs" << std::endl;
+    for (std::map<int,  std::string>::const_iterator it = data_.begin(); it != data_.end(); ++it) {
+        std::cout << "key [ "<< it->first << " ] -> " << std::left << std::setw(20) << it->second 
+        << " => " << Year_[it->first];
+        if(Month_ [it->first]< 10)
+            std::cout << "-0" << std::setw(1) << Month_[it->first];
+        else
+            std::cout << "-" << std::setw(2) << Month_[it->first];
+        if(Day_ [it->first]< 10)
+            std::cout << "-0" << std::setw(1) << Day_[it->first];
+        else
+            std::cout << "-" << std::setw(2) << Day_[it->first];
 
-BitcoinExchange::BitcoinExchange() {std::cout << "default BitcoinExchange constructor" << std::endl;};
-BitcoinExchange::~BitcoinExchange() {std::cout << "default destructor" << std::endl;};
+        std::cout << " => Rate: " << std::setw(-8)  << Rate_[it->first];
+
+        std::cout << std::endl;
+    }    
+};
+
+void BitcoinExchange::print(int key) {
+
+    std::cout << "Display a valid: database input" << std::endl;
+    int Key = 0;
+    
+    for (std::map<int,  std::string>::const_iterator itc = data_.begin(); itc != data_.end(); ++itc) {    
+        Key = itc->first;
+        std::map<int,  std::string>::const_iterator itp = data_.begin();
+        if (key < itp->first ) {
+            throw std::out_of_range("Error: not found in database");
+        }
+        if (Key == 0)
+            throw std::out_of_range("Error: empty database");
+        if (Key == key) {
+            Key = itc->first;
+            break;
+        }
+        if (Key > key) {
+            --itc;
+            Key = itc->first;
+            break;  
+        }
+        
+    }    
+    if (Key == 0)
+        throw std::out_of_range("Error: empty database");    
+    std::cout << "key [ "<< Key << " ] -> " << std::left << std::setw(20) << Line_ [Key]
+    << " => " << Year_[Key];
+    if(Month_ [Key]< 10)
+        std::cout << "-0" << std::setw(1) << Month_[Key];
+    else
+        std::cout << "-" << std::setw(2) << Month_[Key];
+    if(Day_ [Key]< 10)
+        std::cout << "-0" << std::setw(1) << Day_[Key];
+    else
+        std::cout << "-" << std::setw(2) << Day_[Key];
+        std::cout << " => Rate: " << std::setw(-8)  << Rate_[Key];
+        std::cout << std::endl;
+};
+
