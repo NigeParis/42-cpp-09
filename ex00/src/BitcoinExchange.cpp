@@ -6,7 +6,7 @@
 /*   By: nige42 <nige42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 08:56:33 by nrobinso          #+#    #+#             */
-/*   Updated: 2025/04/30 18:35:47 by nige42           ###   ########.fr       */
+/*   Updated: 2025/04/30 18:46:52 by nige42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -264,9 +264,6 @@ void BitcoinExchange::getAndCheckData(void) {
     inputdatafile.close();
 };
 
-;
-
-
 void BitcoinExchange::cleanLine(std::string &line) {
 
 
@@ -274,9 +271,6 @@ void BitcoinExchange::cleanLine(std::string &line) {
     std::replace(line.begin(), line.end(), '|', ',');
     
 };
-
-
-
 
 
 void BitcoinExchange::getInputFile(char *str) {
