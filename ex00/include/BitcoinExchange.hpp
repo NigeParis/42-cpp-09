@@ -6,7 +6,7 @@
 /*   By: nige42 <nige42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 08:55:47 by nrobinso          #+#    #+#             */
-/*   Updated: 2025/04/29 23:55:24 by nige42           ###   ########.fr       */
+/*   Updated: 2025/04/30 10:12:48 by nige42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 #include <map>
 #include <cstdlib>
 #include <sstream> // Required for std::ostringstream in C++98
+#include <iomanip>
+
 
 class Date {
 
@@ -36,18 +38,22 @@ class Date {
     ~Date(void);
 };
 
-class DateAndRate: public Date {
+class BitcoinExchange: public Date {
 
     public:
 
-        DateAndRate();
-        ~DateAndRate(void);
+        BitcoinExchange();
+        ~BitcoinExchange(void);
+
+        void getAndCheckData(void);
+
         
         void getDateValue(std::string &line);
         void getDateLong(void);
 
 
         void printDebug(int lineNumber, std::string &line);
+        void print(unsigned int &index);
 
     private:
     

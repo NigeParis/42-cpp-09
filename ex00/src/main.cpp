@@ -5,9 +5,9 @@ int main(int argc, char *argv[]) {
     (void)argc;
     (void)argv;
 
-    DateAndRate test;
+    BitcoinExchange data;
 
-    
+    data.getAndCheckData();
 
     return 0;
 

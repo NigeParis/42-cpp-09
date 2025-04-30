@@ -6,21 +6,32 @@
 /*   By: nige42 <nige42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 08:56:33 by nrobinso          #+#    #+#             */
-/*   Updated: 2025/04/30 00:01:13 by nige42           ###   ########.fr       */
+/*   Updated: 2025/04/30 10:12:18 by nige42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/BitcoinExchange.hpp"
 
-void  printMap(std::map<int, std::string> &data) {
-    for (std::map<int, std::string>::const_iterator it = data.begin(); it != data.end(); ++it) {
-        std::cout << it->first << " -> " << it->second << std::endl;
-    }    
-};
 
-void  printDay(std::map<int, unsigned int> &jour_) {
-    for (std::map<int, unsigned int>::const_iterator it = jour_.begin(); it != jour_.end(); ++it) {
-        std::cout << it->first << " -> " << it->second << std::endl;
+
+void  BitcoinExchange::print(unsigned int &index) {
+
+    (void)index;
+    for (std::map<int,  std::string>::const_iterator it = data_.begin(); it != data_.end(); ++it) {
+        std::cout << it->first << " -> " << std::setw(15) << it->second 
+        << " => " << Year_[it->first];
+        if(Month_ [it->first]< 10)
+            std::cout << "/0" << std::setw(1) << Month_[it->first];
+        else
+            std::cout << "/" << std::setw(2) << Month_[it->first];
+        if(Day_ [it->first]< 10)
+            std::cout << "/0" << std::setw(1) << Day_[it->first];
+        else
+            std::cout << "/" << std::setw(2) << Day_[it->first];
+
+        std::cout << " => Rate: " << std::setw(-8)  << Rate_[it->first];
+
+        std::cout << std::endl;
     }    
 };
 
@@ -83,7 +94,7 @@ static size_t findComma(std::string &line) {
     return (commapos); 
 };
 
-void DateAndRate::getDateValue(std::string &line) {
+void BitcoinExchange::getDateValue(std::string &line) {
 
     int dashone = 0;
     int dashtwo = 0;
@@ -98,7 +109,7 @@ void DateAndRate::getDateValue(std::string &line) {
     this->rate_ = atof(line.substr(comma + 1).c_str());
 };
 
-void DateAndRate::getDateLong(void) {
+void BitcoinExchange::getDateLong(void) {
     
     std::ostringstream datecode_;
     std::string temp;
@@ -116,15 +127,34 @@ void DateAndRate::getDateLong(void) {
     this->datelong_ = atoi(temp.c_str());
 };
 
-void isDigits(std::string &line) {
+static void isDigits(std::string &line) {
     std::string allowed_chars = "0123456789-.,";    
     if (line.find_first_not_of(allowed_chars) != std::string::npos) {
         throw std::out_of_range("Error: bad input => ");
     }    
 };
 
+static void isValidDate(unsigned int &year, unsigned int &month, unsigned int &day) {
 
-DateAndRate::DateAndRate() {
+    bool leapYear = false;
+    if (year < 1000 || month < 1 || month > 12 || day < 1 || day > 31)
+        throw std::out_of_range("Error: bad input => ");
+    if ((year / 4) == 0)
+        leapYear = true;
+    if (!leapYear && month == 2 && day > 28)    
+        throw std::out_of_range("Error: bad input => ");
+    if (leapYear && month == 2 && day > 29)
+        throw std::out_of_range("Error: bad input => ");
+    if (month == 2)
+        return ;
+    if ((month == 4 || month == 6 || month ==9 || month ==11) && day > 30) {
+        throw std::out_of_range("Error: bad input => ");
+    }
+};
+
+BitcoinExchange::BitcoinExchange() {std::cout << "default BitcoinExchange constructor" << std::endl;};
+
+void BitcoinExchange::getAndCheckData(void) {
     std::cout << "default constructor" << std::endl;
 
     std::ifstream inputdatafile;
@@ -148,16 +178,21 @@ DateAndRate::DateAndRate() {
             }
             catch(std::out_of_range &e ) {
                 std::cerr << e.what() << line << std::endl;
-              //  << std::endl;
                 continue ;   
             }
             
             getDateValue(line);
             getDateLong();
            // printDebug(datelong_, line);
-
-           if (this->day_ < 0 || this->day_ > 31)
-                continue;
+           
+            try {
+                isValidDate(this->year_, this->month_, this->day_);
+            }
+                catch(std::out_of_range &e ) {
+                std::cerr << e.what() << line << std::endl;
+                continue ;   
+            }
+           
 
             std::cout << datelong_ << " => " << rate_ << std::endl;
            
@@ -173,18 +208,31 @@ DateAndRate::DateAndRate() {
     // Add file processing logic here if needed
 
     std::cout << std::endl;
-    printMap(data_);
-    printDay(Day_);
+    print(datelong_);
 
-    std::cout << data_[20101007] << " => " 
-    << Day_[20101007] 
-    << std::endl;
+    
     inputdatafile.close();
 };
 
 
 
-void DateAndRate::printDebug(int lineNumber, std::string &line) {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void BitcoinExchange::printDebug(int lineNumber, std::string &line) {
 
     
     std::cout << "datelong: " << datelong_ // Output: "20130101"
@@ -203,4 +251,4 @@ void DateAndRate::printDebug(int lineNumber, std::string &line) {
 };
 
 
-DateAndRate::~DateAndRate() {};
+BitcoinExchange::~BitcoinExchange() {};
