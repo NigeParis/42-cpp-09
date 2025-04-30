@@ -6,7 +6,7 @@
 /*   By: nige42 <nige42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 08:56:33 by nrobinso          #+#    #+#             */
-/*   Updated: 2025/04/30 14:44:31 by nige42           ###   ########.fr       */
+/*   Updated: 2025/04/30 14:50:06 by nige42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -269,7 +269,7 @@ void BitcoinExchange::getAndCheckData(void) {
     std::cout << std::endl;
     //print();
     try {
-        print(20090101);
+        print(20090102);
     }
     catch(std::out_of_range &e ) {
         std::cerr << e.what() << line << std::endl;
