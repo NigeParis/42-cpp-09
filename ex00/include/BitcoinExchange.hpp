@@ -6,7 +6,7 @@
 /*   By: nige42 <nige42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 08:55:47 by nrobinso          #+#    #+#             */
-/*   Updated: 2025/04/30 11:51:06 by nige42           ###   ########.fr       */
+/*   Updated: 2025/04/30 14:01:33 by nige42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,12 @@ class BitcoinExchange: public Date {
         
         void printDebug(int lineNumber, std::string &line);
         void print(void);
+        void print(int key);
         
         private:
         
         std::map<int, std::string> data_;
+        std::map<int, std::string> Line_;
         std::map<int, unsigned int> Year_;
         std::map<int, unsigned int> Month_;
         std::map<int, unsigned int> Day_;

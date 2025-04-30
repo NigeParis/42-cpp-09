@@ -6,7 +6,7 @@
 /*   By: nige42 <nige42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 08:56:33 by nrobinso          #+#    #+#             */
-/*   Updated: 2025/04/30 12:01:21 by nige42           ###   ########.fr       */
+/*   Updated: 2025/04/30 14:15:15 by nige42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ static size_t findComma(std::string &line) {
 
 void  BitcoinExchange::print(void) {
     
-    std::cout << "Valid: database inputs" << std::endl;
+    std::cout << "Display all valid: database inputs" << std::endl;
     for (std::map<int,  std::string>::const_iterator it = data_.begin(); it != data_.end(); ++it) {
         std::cout << "key [ "<< it->first << " ] -> " << std::left << std::setw(20) << it->second 
         << " => " << Year_[it->first];
@@ -122,6 +122,45 @@ void  BitcoinExchange::print(void) {
         std::cout << std::endl;
     }    
 };
+
+void BitcoinExchange::print(int key) {
+
+    (void)key;
+    std::cout << "Display Valid: database input" << std::endl;
+    int Key = 0;
+    
+
+    for (std::map<int,  std::string>::const_iterator itc = data_.begin(); itc != data_.end(); ++itc) {
+        
+        Key = itc->first;
+        if (Key == key) {
+            Key = itc->first;
+            break;
+        }
+        if (Key > key) {
+            --itc;
+            Key = itc->first;
+            break;  
+        }
+        if (Key == 0)
+            throw std::out_of_range("Error: empty database => ");
+
+    }    
+        
+    std::cout << "key [ "<< Key << " ] -> " << std::left << std::setw(20) << Line_ [Key]
+    << " => " << Year_[Key];
+    if(Month_ [Key]< 10)
+        std::cout << "-0" << std::setw(1) << Month_[Key];
+    else
+        std::cout << "-" << std::setw(2) << Month_[Key];
+    if(Day_ [Key]< 10)
+        std::cout << "-0" << std::setw(1) << Day_[Key];
+    else
+        std::cout << "-" << std::setw(2) << Day_[Key];
+        std::cout << " => Rate: " << std::setw(-8)  << Rate_[Key];
+        std::cout << std::endl;
+};
+
 
 void BitcoinExchange::getDateValue(std::string &line) {
 
@@ -215,6 +254,7 @@ void BitcoinExchange::getAndCheckData(void) {
             
             
             data_[datelong_] = line; // Add the line to the map with the current line number as the key
+            Line_[datelong_] = line; // Add the line to the map with the current line number as the key
             Year_[datelong_] = year_;
             Month_[datelong_] = month_;
             Day_[datelong_] = day_;
@@ -225,7 +265,8 @@ void BitcoinExchange::getAndCheckData(void) {
     }
     
     std::cout << std::endl;
-    print();
+    //print();
+    print(20160903);
     
     
     inputdatafile.close();
