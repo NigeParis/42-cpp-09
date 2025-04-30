@@ -6,7 +6,7 @@
 /*   By: nige42 <nige42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 08:56:33 by nrobinso          #+#    #+#             */
-/*   Updated: 2025/04/30 14:15:15 by nige42           ###   ########.fr       */
+/*   Updated: 2025/04/30 14:44:31 by nige42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,14 +125,17 @@ void  BitcoinExchange::print(void) {
 
 void BitcoinExchange::print(int key) {
 
-    (void)key;
-    std::cout << "Display Valid: database input" << std::endl;
+    std::cout << "Display a valid: database input" << std::endl;
     int Key = 0;
     
-
-    for (std::map<int,  std::string>::const_iterator itc = data_.begin(); itc != data_.end(); ++itc) {
-        
+    for (std::map<int,  std::string>::const_iterator itc = data_.begin(); itc != data_.end(); ++itc) {    
         Key = itc->first;
+        std::map<int,  std::string>::const_iterator itp = data_.begin();
+        if (key < itp->first ) {
+            throw std::out_of_range("Error: not found in database => ");
+        }
+        if (Key == 0)
+            throw std::out_of_range("Error: empty database => ");
         if (Key == key) {
             Key = itc->first;
             break;
@@ -142,11 +145,10 @@ void BitcoinExchange::print(int key) {
             Key = itc->first;
             break;  
         }
-        if (Key == 0)
-            throw std::out_of_range("Error: empty database => ");
-
-    }    
         
+    }    
+    if (Key == 0)
+        throw std::out_of_range("Error: empty database");    
     std::cout << "key [ "<< Key << " ] -> " << std::left << std::setw(20) << Line_ [Key]
     << " => " << Year_[Key];
     if(Month_ [Key]< 10)
@@ -266,8 +268,12 @@ void BitcoinExchange::getAndCheckData(void) {
     
     std::cout << std::endl;
     //print();
-    print(20160903);
-    
+    try {
+        print(20090101);
+    }
+    catch(std::out_of_range &e ) {
+        std::cerr << e.what() << line << std::endl;
+    }
     
     inputdatafile.close();
 };
