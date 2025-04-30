@@ -6,7 +6,7 @@
 /*   By: nige42 <nige42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 08:55:47 by nrobinso          #+#    #+#             */
-/*   Updated: 2025/04/30 16:05:18 by nige42           ###   ########.fr       */
+/*   Updated: 2025/04/30 17:14:57 by nige42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,5 +69,6 @@ class BitcoinExchange: public Date {
         
         void getDateValue(std::string &line);
         void getDateLong(void);
+        void cleanLine(std::string &line);
         
     };

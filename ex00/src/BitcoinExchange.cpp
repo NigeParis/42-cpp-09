@@ -6,7 +6,7 @@
 /*   By: nige42 <nige42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 08:56:33 by nrobinso          #+#    #+#             */
-/*   Updated: 2025/04/30 16:44:49 by nige42           ###   ########.fr       */
+/*   Updated: 2025/04/30 18:35:47 by nige42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,44 +16,63 @@ Date::Date() {};
 Date::~Date(void) {};
 
 static void isDigits(std::string &line) {
-    std::string allowed_chars = "0123456789-.,";    
+    std::string allowed_chars = "0123456789-.,";
+    std::size_t pos = line.find(',');
+    std::string msg = "Error: bad input => " + line.substr(0, pos);    
+    std::string msg2 = "Error: bad input => " + line.substr(0);    
     if (line.find_first_not_of(allowed_chars) != std::string::npos) {
-        throw std::out_of_range("Error: bad database input => ");
+        if (line.find_first_not_of(allowed_chars) < 11)
+            throw std::out_of_range(msg);
+        else
+            throw std::out_of_range(msg2);
     }    
 };
 
-static void isValidDate(unsigned int &year, unsigned int &month, unsigned int &day) {
+static void isValidDate(std::string &line, unsigned int &year, unsigned int &month, unsigned int &day) {
 
+    std::size_t pos = line.find(',');
+    std::string msg = "Error: bad input => " + line.substr(0, pos);
     bool leapYear = false;
-    if (year < 1000 || month < 1 || month > 12 || day < 1 || day > 31)
-        throw std::out_of_range("Error: bad database input => ");
+
+    if (year < 1000 || month < 1 || month > 12 || day < 1 || day > 31) {
+        throw std::out_of_range(msg);
+    }
     if ((year / 4) == 0)
         leapYear = true;
-    if (!leapYear && month == 2 && day > 28)    
-        throw std::out_of_range("Error: bad database input => ");
-    if (leapYear && month == 2 && day > 29)
-        throw std::out_of_range("Error: bad database input => ");
+    if (!leapYear && month == 2 && day > 28) { 
+    throw std::out_of_range(msg);
+    }
+    if (leapYear && month == 2 && day > 29){ 
+        throw std::out_of_range(msg);
+        }
     if (month == 2)
         return ;
-    if ((month == 4 || month == 6 || month ==9 || month ==11) && day > 30) {
-        throw std::out_of_range("Error: bad database input => ");
+    if ((month == 4 || month == 6 || month ==9 || month ==11) && day > 30) { 
+        throw std::out_of_range(msg);
     }
 };
 
-static void isRateValid(ssize_t &value) {
-
-    if (value < 0 || value >= RATELIMIT)
-        throw std::out_of_range("Error: bad database input => ");
+static void isRateValid(std::string &line, ssize_t &value) {
+    (void)line;
+    std::string msg = "Error: not a positive number.";
+    std::string msg2 = "Error: too large a number.";
+    if (value < 0)
+        throw std::out_of_range(msg);    
+    if (value >= RATELIMIT)
+        throw std::out_of_range(msg2);
 };
 
 static bool isYearFormatDataCheck(std::string &line) {
     std::string year;
+    std::size_t pos = line.find(',');
+    std::string msg = "Error: bad input => " + line.substr(0, pos);
+    
     year = line.substr(0, line.find('-')).c_str();
     if (year.size() != 4)
-        throw std::out_of_range("Error: bad database input => ");
+        throw std::out_of_range(msg);
     for (size_t i = 0; i < year.size(); i++) {
         if(year[i] < '0' || year[i] > '9')
-            throw std::out_of_range("Error: bad database input => ");
+            throw std::out_of_range(msg);
     }
     return true;
 };
@@ -62,18 +81,19 @@ static bool isCommasDashDataCheck(std::string &line) {
 
     int count = 0;
     int comma = 0;
+    std::string msg = "Error: bad input => " + line;
     for (size_t i = 0; i < line.size(); i++) {
         if (line[i] == '-' && i < 9)
             count++;
         if (line[i] == ',')
             comma++;
         if (comma > 1)
-            throw std::out_of_range("Error: bad database input => ");
+            throw std::out_of_range(msg);
     }
     if (count == 2 && comma == 1) {
         return true;
     }
-    throw std::out_of_range("Error: bad database input => ");
+    throw std::out_of_range(msg);
 };
 
 static size_t findDashOne(std::string &line) {
@@ -101,8 +121,6 @@ static size_t findComma(std::string &line) {
     commapos = line.find(',');    
     return (commapos); 
 };
-
-
 
 int BitcoinExchange::findKeyOrNearest(int key) {
 
@@ -179,9 +197,6 @@ static  std::ifstream openfile(std::string const &file) {
     return (inputdatafile);
 };
 
-
-
-
 void BitcoinExchange::getAndCheckData(void) {
     std::cout << "getAndCheckData() called" << std::endl;
     
@@ -210,22 +225,22 @@ void BitcoinExchange::getAndCheckData(void) {
             catch(std::out_of_range &e ) {
                 if (errorsFound == 1)
                     std::cout << "Liste des errors in dataBase found" << std::endl;
-                std::cerr << e.what() << line << std::endl;
+                std::cerr << e.what() << std::endl;
                 continue ;   
             }
             getDateValue(line);
             getDateLong();
             try {
                 errorsFound++;
-                isValidDate(this->year_, this->month_, this->day_);
+                isValidDate(line, this->year_, this->month_, this->day_);
                 ssize_t safeRate = static_cast<ssize_t>(rate_);
-                isRateValid(safeRate);
+                isRateValid(line, safeRate);
                 errorsFound--;
             }
             catch(std::out_of_range &e ) {
                 if (errorsFound == 1)
                     std::cout << "Liste des errors in dataBase found" << std::endl;
-                std::cerr << e.what() << line << std::endl;
+                std::cerr << e.what() << std::endl;
                 continue ;   
             }
             data_[datelong_] = line; // Add the line to the map with the current line number as the key
@@ -249,11 +264,27 @@ void BitcoinExchange::getAndCheckData(void) {
     inputdatafile.close();
 };
 
+;
+
+
+void BitcoinExchange::cleanLine(std::string &line) {
+
+
+    line.erase(std::remove(line.begin(), line.end(), ' '), line.end());
+    std::replace(line.begin(), line.end(), '|', ',');
+    
+};
+
+
+
+
 
 void BitcoinExchange::getInputFile(char *str) {
 
     std::ifstream inputfile; 
     std::string line;
+    Date data;
+    unsigned int count = 0;
 
     try {
         inputfile = openfile(str);
@@ -265,13 +296,39 @@ void BitcoinExchange::getInputFile(char *str) {
     try {
       
         while (std::getline(inputfile, line)) {
-            std::cout << line << std::endl;
-        
 
-
+            if (count > 0) {   
+                cleanLine(line);   
+                try {
+                    isDigits(line);
+                    isCommasDashDataCheck(line);
+                    isYearFormatDataCheck(line);
+                
+                }
+                catch(std::out_of_range &e ) {
+                    std::cerr << e.what() << std::endl;
+                    continue ;   
+                }
 
             
-        
+                getDateValue(line);
+                getDateLong();    
+
+                try {
+                    ssize_t safeRate = static_cast<ssize_t>(rate_);
+                    isValidDate(line, this->year_, this->month_, this->day_);
+                    isRateValid(line, safeRate);
+                }
+                catch(std::out_of_range &e ) {
+                    std::cerr << e.what() << std::endl;
+                    continue ;   
+                }   
+
+
+
+                std::cout << line << " => " << rate_ << " datelong: " << datelong_ << std::endl;   
+            }
+            count++;
         }
     }
     catch (std::exception &e) {
