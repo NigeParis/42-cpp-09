@@ -6,7 +6,7 @@
 /*   By: nige42 <nige42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 08:56:33 by nrobinso          #+#    #+#             */
-/*   Updated: 2025/04/30 18:46:52 by nige42           ###   ########.fr       */
+/*   Updated: 2025/05/01 22:08:29 by nige42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,19 @@ static size_t findComma(std::string &line) {
     return (commapos); 
 };
 
+static size_t findNbOfrCommas(std::string &line) {
+
+    size_t commapos = 0;  
+
+    for (std::string::const_iterator itc = line.begin(); itc != line.end(); ++itc) {    
+        if (*itc == ',')   
+            commapos++;
+    }
+    return (commapos); 
+};
+
+
+
 int BitcoinExchange::findKeyOrNearest(int key) {
 
     std::cout << "Find Key: from database input" << std::endl;
@@ -158,10 +171,16 @@ void BitcoinExchange::getDateValue(std::string &line) {
     int dashone = 0;
     int dashtwo = 0;
     int comma = 0;
-              
+    std::string msg = "DDDDDDError: bad EEinput => " + line.substr(0);    
+          
     dashone = findDashOne(line);
     dashtwo = findDashTwo(line);
-    comma = findComma(line);    
+    comma = findComma(line);
+    if (comma == 0)
+        throw std::out_of_range(msg);
+    if ((line.size() == 11) || (findNbOfrCommas(line) > 1))
+        throw std::out_of_range(msg);   
+
     this->year_ = atoi(line.substr(0, dashone).c_str());
     this->month_ = atoi(line.substr(5, dashtwo - 5).c_str());
     this->day_ = atoi(line.substr(dashtwo + 1, 2).c_str());
@@ -213,7 +232,9 @@ void BitcoinExchange::getAndCheckData(void) {
         return;
     }
     while (std::getline(inputdatafile, line)) {
-        if (lineNumber > 0) {       
+        if (lineNumber > 0) {  
+            cleanLine(line);   
+     
             try {
                 errorsFound++;
                 isDigits(line);
@@ -228,9 +249,9 @@ void BitcoinExchange::getAndCheckData(void) {
                 std::cerr << e.what() << std::endl;
                 continue ;   
             }
-            getDateValue(line);
-            getDateLong();
             try {
+                getDateValue(line);
+                getDateLong();
                 errorsFound++;
                 isValidDate(line, this->year_, this->month_, this->day_);
                 ssize_t safeRate = static_cast<ssize_t>(rate_);
@@ -302,13 +323,10 @@ void BitcoinExchange::getInputFile(char *str) {
                 catch(std::out_of_range &e ) {
                     std::cerr << e.what() << std::endl;
                     continue ;   
-                }
-
-            
-                getDateValue(line);
-                getDateLong();    
-
+                }                
                 try {
+                    getDateValue(line);
+                    getDateLong();    
                     ssize_t safeRate = static_cast<ssize_t>(rate_);
                     isValidDate(line, this->year_, this->month_, this->day_);
                     isRateValid(line, safeRate);
