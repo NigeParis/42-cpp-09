@@ -6,17 +6,41 @@
 /*   By: nige42 <nige42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 08:56:33 by nrobinso          #+#    #+#             */
-/*   Updated: 2025/05/01 22:08:29 by nige42           ###   ########.fr       */
+/*   Updated: 2025/05/02 13:54:52 by nige42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/BitcoinExchange.hpp"
 
-Date::Date() {};
+Date::Date(): datelong_(0), year_(0), month_(0), day_(0), rate_(0) {};
+Date::Date(Date &copy) {*this = copy;};
+Date &Date::operator=(Date &copy) {
+    if(this != &copy) {
+        this->datelong_ = copy.datelong_;
+        this->year_ = copy.year_;
+        this->month_ = copy.month_;
+        this->day_ = copy.day_;
+        this->rate_ = copy.rate_;
+    }
+    return(*this);
+};
 Date::~Date(void) {};
 
 static void isDigits(std::string &line) {
     std::string allowed_chars = "0123456789-.,";
+    std::size_t pos = line.find(',');
+    std::string msg = "Error: bad input => " + line.substr(0, pos);    
+    std::string msg2 = "Error: bad input => " + line.substr(0);    
+    if (line.find_first_not_of(allowed_chars) != std::string::npos) {
+        if (line.find_first_not_of(allowed_chars) < 11)
+            throw std::out_of_range(msg);
+        else
+            throw std::out_of_range(msg2);
+    }    
+};
+
+static void isDigitsInput(std::string &line) {
+    std::string allowed_chars = "0123456789-.| ";
     std::size_t pos = line.find(',');
     std::string msg = "Error: bad input => " + line.substr(0, pos);    
     std::string msg2 = "Error: bad input => " + line.substr(0);    
@@ -52,13 +76,23 @@ static void isValidDate(std::string &line, unsigned int &year, unsigned int &mon
     }
 };
 
-static void isRateValid(std::string &line, ssize_t &value) {
+static void isRateValid(std::string &line, float &value) {
     (void)line;
     std::string msg = "Error: not a positive number.";
     std::string msg2 = "Error: too large a number.";
     if (value < 0)
         throw std::out_of_range(msg);    
-    if (value >= RATELIMIT)
+    if (value > RATELIMIT)
+        throw std::out_of_range(msg2);
+};
+
+static void isValueValid(std::string &line, float &value) {
+    (void)line;
+    std::string msg = "Error: not a positive number.";
+    std::string msg2 = "Error: too large a number.";
+    if (value <= 0)
+        throw std::out_of_range(msg);    
+    if (value >= VALUELIMIT)
         throw std::out_of_range(msg2);
 };
 
@@ -133,11 +167,9 @@ static size_t findNbOfrCommas(std::string &line) {
     return (commapos); 
 };
 
-
-
 int BitcoinExchange::findKeyOrNearest(int key) {
 
-    std::cout << "Find Key: from database input" << std::endl;
+    // std::cout << "Find Key: from database input" << std::endl;
     int Key = 0;
 
     if (key < 10000000 || key > 99999999) 
@@ -156,6 +188,7 @@ int BitcoinExchange::findKeyOrNearest(int key) {
             break;
         }
         if (Key > key) {
+            
             --itc;
             Key = itc->first;
             break;  
@@ -163,7 +196,7 @@ int BitcoinExchange::findKeyOrNearest(int key) {
     }    
     if (Key == 0)
         throw std::out_of_range("Error: empty database");    
-    return (key);
+    return (Key);
 };
 
 void BitcoinExchange::getDateValue(std::string &line) {
@@ -171,7 +204,7 @@ void BitcoinExchange::getDateValue(std::string &line) {
     int dashone = 0;
     int dashtwo = 0;
     int comma = 0;
-    std::string msg = "DDDDDDError: bad EEinput => " + line.substr(0);    
+    std::string msg = "Error: bad input => " + line.substr(0);    
           
     dashone = findDashOne(line);
     dashtwo = findDashTwo(line);
@@ -217,7 +250,7 @@ static  std::ifstream openfile(std::string const &file) {
 };
 
 void BitcoinExchange::getAndCheckData(void) {
-    std::cout << "getAndCheckData() called" << std::endl;
+    //std::cout << "getAndCheckData() called" << std::endl;
     
     std::string line;
     int lineNumber = 0;
@@ -233,34 +266,74 @@ void BitcoinExchange::getAndCheckData(void) {
     }
     while (std::getline(inputdatafile, line)) {
         if (lineNumber > 0) {  
-            cleanLine(line);   
-     
+            if (line.empty())
+                    continue;
             try {
                 errorsFound++;
+                cleanLine(line);   
                 isDigits(line);
                 isCommasDashDataCheck(line);
                 isYearFormatDataCheck(line);
+                getDateValue(line);
+                getDateLong();
+                isValidDate(line, this->year_, this->month_, this->day_);
+                float safeRate = static_cast<float>(rate_);
+                isRateValid(line, safeRate);
                 errorsFound--;
                 
             }
             catch(std::out_of_range &e ) {
                 if (errorsFound == 1)
-                    std::cout << "Liste des errors in dataBase found" << std::endl;
-                std::cerr << e.what() << std::endl;
                 continue ;   
             }
+            data_[datelong_] = line; // Add the line to the map with the current line number as the key
+            Line_[datelong_] = line; // Add the line to the map with the current line number as the key
+            Year_[datelong_] = year_;
+            Month_[datelong_] = month_;
+            Day_[datelong_] = day_;
+            Rate_[datelong_] = rate_;
+        }
+        ++lineNumber;
+    }    
+    inputdatafile.close();
+};
+
+void BitcoinExchange::getAndCheckData(char *str) {
+    //std::cout << "getAndCheckData() called" << std::endl;
+    (void)str;
+    std::string line;
+    int lineNumber = 0;
+    std::ifstream inputdatafile;
+    int errorsFound = 0;
+        
+    try {
+        inputdatafile = openfile(DATABASE);
+    }
+    catch(std::exception &e) {
+        std::cerr << e.what() << line << std::endl;
+        return;
+    }
+    while (std::getline(inputdatafile, line)) {
+        if (lineNumber > 0) {  
             try {
+                errorsFound++;
+                if (line.empty()) {
+                    throw std::out_of_range("Empty: bad input => Empty line");
+                }
+                cleanLine(line);   
+                isDigits(line);
+                isCommasDashDataCheck(line);
+                isYearFormatDataCheck(line);
                 getDateValue(line);
                 getDateLong();
-                errorsFound++;
                 isValidDate(line, this->year_, this->month_, this->day_);
-                ssize_t safeRate = static_cast<ssize_t>(rate_);
+                float safeRate = static_cast<float>(rate_);
                 isRateValid(line, safeRate);
                 errorsFound--;
             }
             catch(std::out_of_range &e ) {
                 if (errorsFound == 1)
-                    std::cout << "Liste des errors in dataBase found" << std::endl;
+                    std::cout << RED << "List of all errors in dataBase found" << RESET << std::endl;
                 std::cerr << e.what() << std::endl;
                 continue ;   
             }
@@ -273,32 +346,30 @@ void BitcoinExchange::getAndCheckData(void) {
         }
         ++lineNumber;
     }
-    try {
-        std::cout << std::endl;
-        //print();
-        //print(20100102);
-        //std::cout << BitcoinExchange::Rate_[findKeyOrNearest(20100102)] << std::endl;
-    }
-    catch(std::out_of_range &e ) {
-        std::cerr << e.what() << line << std::endl;
-    }
+    if (errorsFound)
+        std::cout << "        -----------" << std::endl;
+    
     inputdatafile.close();
 };
 
 void BitcoinExchange::cleanLine(std::string &line) {
-
-
     line.erase(std::remove(line.begin(), line.end(), ' '), line.end());
     std::replace(line.begin(), line.end(), '|', ',');
     
 };
 
+void BitcoinExchange::swapComma(std::string &line) {
+    std::replace(line.begin(), line.end(), ',', '|');
+    
+};
 
 void BitcoinExchange::getInputFile(char *str) {
 
     std::ifstream inputfile; 
     std::string line;
-    Date data;
+    Date dataInput;
+    float result = 0;
+    float rate = 0;
     unsigned int count = 0;
 
     try {
@@ -311,34 +382,39 @@ void BitcoinExchange::getInputFile(char *str) {
     try {
       
         while (std::getline(inputfile, line)) {
-
+            
+            if (inputfile.fail() && !inputfile.eof()) { // Check for errors other than EOF
+                throw std::runtime_error("Error: could not read file.");        
+                
+            }
             if (count > 0) {   
-                cleanLine(line);   
+                if (line.empty())
+                    continue;
                 try {
-                    isDigits(line);
+                    isDigitsInput(line);
+                    cleanLine(line);   
                     isCommasDashDataCheck(line);
                     isYearFormatDataCheck(line);
-                
-                }
-                catch(std::out_of_range &e ) {
-                    std::cerr << e.what() << std::endl;
-                    continue ;   
-                }                
-                try {
                     getDateValue(line);
                     getDateLong();    
-                    ssize_t safeRate = static_cast<ssize_t>(rate_);
+                    float safeRate = static_cast<float>(rate_);
                     isValidDate(line, this->year_, this->month_, this->day_);
-                    isRateValid(line, safeRate);
+                    isValueValid(line, safeRate);
+                    swapComma(line);
+                    rate  = BitcoinExchange::Rate_[findKeyOrNearest(datelong_)];   
+                    result = rate_ * rate;   
+                    std::cout << line.substr(0, 10) << " => " << rate_ << " = " << result <<  std::endl;   
                 }
                 catch(std::out_of_range &e ) {
                     std::cerr << e.what() << std::endl;
                     continue ;   
-                }   
-
-
-
-                std::cout << line << " => " << rate_ << " datelong: " << datelong_ << std::endl;   
+                }              
+                
+                
+                
+            
+        // std::cout << BitcoinExchange::Rate_[findKeyOrNearest(datelong_)] << std::endl;
+          
             }
             count++;
         }
@@ -346,108 +422,30 @@ void BitcoinExchange::getInputFile(char *str) {
     catch (std::exception &e) {
         std::cerr << e.what() << std::endl;
     }
-    
     inputfile.close();
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-BitcoinExchange::BitcoinExchange() {std::cout << "default BitcoinExchange constructor" << std::endl;};
-BitcoinExchange::~BitcoinExchange() {std::cout << "default destructor" << std::endl;};
-
-
-//DEBUG FUNCTIONS
-void BitcoinExchange::printDebug(int lineNumber, std::string &line) {
-    
-    
-    std::cout << "datelong: " << datelong_ // Output: "20130101"
-    << " Key: " << lineNumber << " line: " << line << " Y: " << line.substr(0,4) 
-    << " M: "<< line.substr(5,2) << " D: "<< line.substr(8,2) 
-    << std::endl;
-    
-    
-    
-    std::cout << "year: " << year_;
-    std::cout << " month: " << month_;
-    std::cout << " day: " << day_;
-    std::cout << " rate: " << rate_ 
-    << std::endl << std::endl;
-    
+BitcoinExchange::BitcoinExchange(): data_(), Line_(), Year_(), Month_(), Day_(), Rate_() {
+    //std::cout << "default BitcoinExchange constructor" << std::endl;
 };
 
-void  BitcoinExchange::print(void) {
-    
-    std::cout << "Display all valid: database inputs" << std::endl;
-    for (std::map<int,  std::string>::const_iterator it = data_.begin(); it != data_.end(); ++it) {
-        std::cout << "key [ "<< it->first << " ] -> " << std::left << std::setw(20) << it->second 
-        << " => " << Year_[it->first];
-        if(Month_ [it->first]< 10)
-            std::cout << "-0" << std::setw(1) << Month_[it->first];
-        else
-            std::cout << "-" << std::setw(2) << Month_[it->first];
-        if(Day_ [it->first]< 10)
-            std::cout << "-0" << std::setw(1) << Day_[it->first];
-        else
-            std::cout << "-" << std::setw(2) << Day_[it->first];
+BitcoinExchange::BitcoinExchange(BitcoinExchange &copy) {*this = copy;};
 
-        std::cout << " => Rate: " << std::setw(-8)  << Rate_[it->first];
+BitcoinExchange &BitcoinExchange::operator=(BitcoinExchange &copy) {
 
-        std::cout << std::endl;
-    }    
+    if (this != &copy) {
+
+        this->data_ = copy.data_;
+        this->Line_ = copy.Line_;
+        this->Year_ = copy.Year_;
+        this->Month_ = copy.Month_;
+        this->Day_ = copy.Day_;
+        this->Rate_ = copy.Rate_;
+    }
+    return (*this);
 };
 
-void BitcoinExchange::print(int key) {
-
-    std::cout << "Display a valid: database input" << std::endl;
-    int Key = 0;
-    
-    for (std::map<int,  std::string>::const_iterator itc = data_.begin(); itc != data_.end(); ++itc) {    
-        Key = itc->first;
-        std::map<int,  std::string>::const_iterator itp = data_.begin();
-        if (key < itp->first ) {
-            throw std::out_of_range("Error: not found in database");
-        }
-        if (Key == 0)
-            throw std::out_of_range("Error: empty database");
-        if (Key == key) {
-            Key = itc->first;
-            break;
-        }
-        if (Key > key) {
-            --itc;
-            Key = itc->first;
-            break;  
-        }
-        
-    }    
-    if (Key == 0)
-        throw std::out_of_range("Error: empty database");    
-    std::cout << "key [ "<< Key << " ] -> " << std::left << std::setw(20) << Line_ [Key]
-    << " => " << Year_[Key];
-    if(Month_ [Key]< 10)
-        std::cout << "-0" << std::setw(1) << Month_[Key];
-    else
-        std::cout << "-" << std::setw(2) << Month_[Key];
-    if(Day_ [Key]< 10)
-        std::cout << "-0" << std::setw(1) << Day_[Key];
-    else
-        std::cout << "-" << std::setw(2) << Day_[Key];
-        std::cout << " => Rate: " << std::setw(-8)  << Rate_[Key];
-        std::cout << std::endl;
+BitcoinExchange::~BitcoinExchange() {
+    //std::cout << "default destructor" << std::endl;
 };
 
