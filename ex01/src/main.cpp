@@ -6,18 +6,46 @@
 /*   By: nige42 <nige42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 14:12:53 by nige42            #+#    #+#             */
-/*   Updated: 2025/05/02 14:12:58 by nige42           ###   ########.fr       */
+/*   Updated: 2025/05/04 12:30:38 by nige42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/RPN.hpp"
 
 int main(int argc, char *argv[]) {
-   
-   (void)argc;
-   (void)*argv;
+    (void)argc;
+    (void)argv;
     
+    RPN input;
+    std::string inputStr;
 
+    if (argc < 2) {
+        std::cout << "Error: ./RPN [ARG]" << std::endl;
+        return -1;
+    }
+    try {
+        for (int i = 1; i < argc; i++) {
+            inputStr.append(argv[i]);
+            if (i < argc - 1)
+            inputStr.append(" ");
+        }
+        input.setInput(inputStr);
+    }
+    catch(std::exception &e) {
+
+        std::cout << e.what() << std::endl;
+        
+    }
+    
+   
+   
+    std::cout << argc << " input " << inputStr << std::endl;
+    
+   
+   
+
+
+   
 
     return 0;
 

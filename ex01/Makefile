@@ -16,7 +16,7 @@ CXX=c++
 
 
 SRC_DIR = src/
-SRC = main.cpp
+SRC = main.cpp RPN.cpp
 
 OBJ_DIR = build/
 
