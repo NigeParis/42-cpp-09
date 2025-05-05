@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RPN.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nige42 <nige42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nrobinso <nrobinso@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 10:14:59 by nige42            #+#    #+#             */
-/*   Updated: 2025/05/04 23:23:01 by nige42           ###   ########.fr       */
+/*   Updated: 2025/05/05 08:56:43 by nrobinso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ RPN::RPN(std::string &inputStr) {
 void removeExtraSpaces(std::string &inputStr) {
     std::string result;
     bool lastWasSpace = false;
-
+    // std::cout << "str '" << inputStr << "'" << std::endl;
     for (size_t i = 0; i < inputStr.size(); ++i) {
         if (inputStr[i] == ' ') {
             if (!lastWasSpace) {
@@ -40,21 +40,24 @@ void removeExtraSpaces(std::string &inputStr) {
     inputStr = result;
 }
 
-bool isValidPrefix(const std::string &expr) {
-    std::istringstream iss(expr);
-    std::stack<int> s;
-    std::string token;
+bool isValidExpression(const std::string &inputStr) {
+    std::istringstream inStringStream(inputStr);
+    std::stack<int> counter;
+    std::string extractedStr;
     
-    while (iss >> token) {
-        if (token == "+" || token == "-" || token == "*" || token == "/") {
-            if (s.size() < 2) return false;
-            s.pop();
+    //  you can use also while (inStringStream >> extractedStr) {
+        while (std::getline(inStringStream, extractedStr, ' ')) {
+        if (extractedStr == "+" || extractedStr == "-" || extractedStr == "*" || extractedStr == "/") {
+            if (counter.size() < 2) return false;
+            counter.pop();
         } else {
-            s.push(1);
+            counter.push(1);
         }
     }
     
-    return s.size() == 1;
+    if (counter.size() == 1)
+        return true;
+    return false;
 }
 
 
@@ -65,7 +68,6 @@ bool checkInputStr(std::string &inputStr) {
     removeExtraSpaces(inputStr);
     for (size_t i = inputStr.size(); i > 0; i--) {
         if (i%2 != 0 && inputStr[i] != '\0') {
-            //std::cout << "inputStr = '" << inputStr[i] << "'" << "i = " << i << std::endl;
             if (inputStr[i] != ' ')
                 return (true);
         } else {
@@ -86,8 +88,11 @@ bool checkInputStr(std::string &inputStr) {
 
 
 
-void RPN::setInput(std::string &inputStr) {
+void RPN::setInput(const char *input) {
 
+
+    std::string inputStr = input;
+    
     std::cout << "setInput() called" << std::endl;
     if (inputStr.empty()) {
         throw std::runtime_error("Error: Input empty");
@@ -96,10 +101,9 @@ void RPN::setInput(std::string &inputStr) {
     if(checkInputStr(inputStr))
         throw std::runtime_error("Error: Input format");
     
-    if (isValidPrefix(inputStr))
-        std::cout << "Expression is valid.\n";
-    else
-        std::cout << "Expression is INVALID!\n";
+    if (!isValidExpression(inputStr))
+        throw std::runtime_error("Error: invalid expression");
+
 
     
     this->input.push(inputStr);

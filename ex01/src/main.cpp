@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nige42 <nige42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nrobinso <nrobinso@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 14:12:53 by nige42            #+#    #+#             */
-/*   Updated: 2025/05/04 12:30:38 by nige42           ###   ########.fr       */
+/*   Updated: 2025/05/05 08:28:15 by nrobinso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@ int main(int argc, char *argv[]) {
     (void)argv;
     
     RPN input;
-    std::string inputStr;
-
+    std::string inputStr = "";
+    
     if (argc < 2) {
         std::cout << "Error: ./RPN [ARG]" << std::endl;
         return -1;
@@ -27,9 +27,10 @@ int main(int argc, char *argv[]) {
         for (int i = 1; i < argc; i++) {
             inputStr.append(argv[i]);
             if (i < argc - 1)
-            inputStr.append(" ");
+                inputStr.append(" ");
         }
-        input.setInput(inputStr);
+        
+        input.setInput(inputStr.c_str());
     }
     catch(std::exception &e) {
 
