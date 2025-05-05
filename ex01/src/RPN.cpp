@@ -6,7 +6,7 @@
 /*   By: nrobinso <nrobinso@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 10:14:59 by nige42            #+#    #+#             */
-/*   Updated: 2025/05/05 16:02:50 by nrobinso         ###   ########.fr       */
+/*   Updated: 2025/05/05 16:30:56 by nrobinso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,12 @@ void removeExtraSpaces(std::string &inputStr) {
     std::string result;
     bool lastWasSpace = false;
     for (size_t i = 0; i < inputStr.size(); ++i) {
+
+        if (i == 0  && inputStr[0] == ' ') {
+            while (inputStr[i] == ' ') {
+                i++;
+            }
+        }
         if (inputStr[i] == ' ') {
             if (!lastWasSpace) {
                 result += inputStr[i];
@@ -93,13 +99,12 @@ bool checkInputStr(std::string &inputStr) {
 
 void RPN::setInput(std::string &inputStr) {
     
-    std::cout << "setInput() called" << std::endl;
     if (inputStr.empty()) {
         throw std::runtime_error("Error: Input empty");
     }
     
     removeExtraSpaces(inputStr);
-
+    
     if(checkInputStr(inputStr))
         throw std::runtime_error("Error: Input format");
     
@@ -109,7 +114,6 @@ void RPN::setInput(std::string &inputStr) {
     for (std::string::iterator itc = inputStr.begin(); itc != inputStr.end(); ++itc ) {
         this->input_.push(*itc);
     }
-    std::cout << "input_: " << "'" << inputStr << "'" << std::endl;
 };
 
 
@@ -200,9 +204,11 @@ void RPN::setResult(std::string &inputStr) {
         }        
     }
     if (std::floor(result) == result) {
-        std::cout << std::fixed << std::setprecision(0) << result << std::endl;; // No decimals if it's an integer
+        std::cout << std::fixed << std::setprecision(0) 
+        << result << std::endl;
     } else {
-        std::cout << std::fixed << std::setprecision(PRECISION) << result << std::endl;; // Show 4 decimals if it's not an integer
+        std::cout << std::fixed << std::setprecision(PRECISION) 
+        << result << std::endl;
     }
 
 }
