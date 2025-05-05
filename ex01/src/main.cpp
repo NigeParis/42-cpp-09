@@ -6,7 +6,7 @@
 /*   By: nrobinso <nrobinso@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 14:12:53 by nige42            #+#    #+#             */
-/*   Updated: 2025/05/05 08:28:15 by nrobinso         ###   ########.fr       */
+/*   Updated: 2025/05/05 10:49:10 by nrobinso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ int main(int argc, char *argv[]) {
     (void)argv;
     
     RPN input;
+    std::stringstream lineEpression;
     std::string inputStr = "";
     
     if (argc < 2) {
@@ -25,29 +26,23 @@ int main(int argc, char *argv[]) {
     }
     try {
         for (int i = 1; i < argc; i++) {
-            inputStr.append(argv[i]);
+            lineEpression << argv[i];
             if (i < argc - 1)
-                inputStr.append(" ");
+                lineEpression << " ";
         }
+        std::getline(lineEpression, inputStr);
         
-        input.setInput(inputStr.c_str());
+        input.setInput(inputStr);
+
+        input.setNumber(inputStr);
+
+        
     }
     catch(std::exception &e) {
 
         std::cout << e.what() << std::endl;
         
-    }
-    
-   
-   
-    std::cout << argc << " input " << inputStr << std::endl;
-    
-   
-   
-
-
-   
-
+    }   
     return 0;
 
 }
