@@ -6,7 +6,7 @@
 /*   By: nrobinso <nrobinso@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 14:12:53 by nige42            #+#    #+#             */
-/*   Updated: 2025/05/05 10:49:10 by nrobinso         ###   ########.fr       */
+/*   Updated: 2025/05/05 15:31:21 by nrobinso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int main(int argc, char *argv[]) {
         
         input.setInput(inputStr);
 
-        input.setNumber(inputStr);
+        input.setResult(inputStr);
 
         
     }

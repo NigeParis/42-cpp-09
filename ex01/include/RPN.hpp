@@ -6,7 +6,7 @@
 /*   By: nrobinso <nrobinso@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 14:13:15 by nige42            #+#    #+#             */
-/*   Updated: 2025/05/05 13:35:56 by nrobinso         ###   ########.fr       */
+/*   Updated: 2025/05/05 16:03:14 by nrobinso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,10 @@
 #include <stack>
 #include <string>
 #include <limits>
+#include <iomanip> // Required for std::fixed & std::setprecision
+#include <cmath> // Needed for std::floor
 
-
+#define PRECISION 3
 
 class RPN {
 
@@ -28,7 +30,7 @@ class RPN {
         RPN(std::string &inputStr);
         ~RPN(void);
         void setInput(std::string &inputStr);
-        void setNumber(std::string &inputStr);
+        void setResult(std::string &inputStr);
 
 
 
@@ -36,7 +38,10 @@ class RPN {
     
         std::stack<char> input_;
 
-        long long safeMultiply(long long nbr1, long long nbr2); 
+        double safeMultiply(double nbr1, double nbr2); 
+        double safeAdd(double nbr1, double nbr2); 
+        double safeSubtract(double nbr1, double nbr2); 
+        double safeDivide(double nbr1, double nbr2); 
 };
 
 
