@@ -6,7 +6,7 @@
 /*   By: nrobinso <nrobinso@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 10:14:59 by nige42            #+#    #+#             */
-/*   Updated: 2025/05/05 12:31:23 by nrobinso         ###   ########.fr       */
+/*   Updated: 2025/05/05 13:40:03 by nrobinso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,13 +114,32 @@ void RPN::setInput(std::string &inputStr) {
 };
 
 
+long long RPN::safeMultiply(long long nbr1, long long nbr2) {
+
+    const long long LL_MIN = std::numeric_limits<long long>::min();
+    const long long LL_MAX = std::numeric_limits<long long>::max();
+
+    if ((nbr1 > 0 && nbr2 > 0 && nbr1 > LL_MAX / nbr2) ||  // Positive overflow
+    (nbr1 < 0 && nbr2 < 0 && nbr1 < LL_MAX / nbr2) ||  // Negative overflow
+    (nbr1 > 0 && nbr2 < 0 && nbr2 < LL_MIN / nbr1) ||  // Mixed underflow
+    (nbr1 < 0 && nbr2 > 0 && nbr1 < LL_MIN / nbr2)) {  // Mixed underflow
+        throw std::runtime_error("Error: Multiplication exceeds long long limits!");
+    }
+
+
+    return (nbr1 * nbr2);
+}
+
+
+
+
 
 void RPN::setNumber(std::string &inputStr) {
     
-    std::stack<int> numberStack;
-    int nbr1 = 0;
-    int nbr2 = 0;
-    int result = 0;
+    std::stack<long long> numberStack;
+    long long nbr1 = 0;
+    long long  nbr2 = 0;
+    long long result = 0;
     
 
     for (std::string::iterator it = inputStr.begin(); it != inputStr.end(); ++it ) {
@@ -141,21 +160,21 @@ void RPN::setNumber(std::string &inputStr) {
             
             if (*it == '+') {
                 result = nbr1 + nbr2;
-                std::cout << "result+: " << result << " nbr1: " << nbr1 << " nbr2: " << nbr2 << std::endl;
+                std::cout << "result: " << result << " nbr1: " << nbr1 << " + " << " nbr2: " << nbr2 << std::endl;
             }
             else if (*it == '-') {
                 result = nbr1 - nbr2;
-                std::cout << "result+: " << result << " nbr1: " << nbr1 << " nbr2: " << nbr2 << std::endl;
+                std::cout << "result: " << result << " nbr1: " << nbr1 << " - " << " nbr2: " << nbr2 << std::endl;
             }
             else if (*it == '*') {
-                result = nbr1 * nbr2;
-                std::cout << "result+: " << result << " nbr1: " << nbr1 << " nbr2: " << nbr2 << std::endl;
+                result = safeMultiply(nbr1, nbr2);
+                std::cout << "result: " << result << " nbr1: " << nbr1 << " * " <<" nbr2: " << nbr2 << std::endl;
             }
             else if (*it == '/') {
                 if (nbr2 == 0) {
                     throw std::runtime_error("Error: invalid division par zero");
                 }
-                std::cout << "result+: " << result << " nbr1: " << nbr1 << " nbr2: " << nbr2 << std::endl;
+                std::cout << "result: " << result << " nbr1: " << nbr1 << " / " << " nbr2: " << nbr2 << std::endl;
                 result = nbr1 / nbr2;
             }
             numberStack.push(result);

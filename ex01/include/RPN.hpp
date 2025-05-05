@@ -6,7 +6,7 @@
 /*   By: nrobinso <nrobinso@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 14:13:15 by nige42            #+#    #+#             */
-/*   Updated: 2025/05/05 11:42:39 by nrobinso         ###   ########.fr       */
+/*   Updated: 2025/05/05 13:35:56 by nrobinso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <exception>
 #include <stack>
 #include <string>
+#include <limits>
 
 
 
@@ -34,6 +35,8 @@ class RPN {
     private:
     
         std::stack<char> input_;
+
+        long long safeMultiply(long long nbr1, long long nbr2); 
 };
 
 
