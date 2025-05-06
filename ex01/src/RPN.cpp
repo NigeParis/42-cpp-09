@@ -6,7 +6,7 @@
 /*   By: nrobinso <nrobinso@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 10:14:59 by nige42            #+#    #+#             */
-/*   Updated: 2025/05/05 17:35:18 by nrobinso         ###   ########.fr       */
+/*   Updated: 2025/05/06 09:10:33 by nrobinso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ bool isValidExpression(const std::string &inputStr) {
     return false;
 };
 
-bool checkInputStr(std::string &inputStr) {
+bool checkInputStr(const std::string &inputStr) {
     
     for (size_t i = inputStr.size(); i > 0; i--) {
         if (i%2 != 0 && inputStr[i] != '\0') {
@@ -130,14 +130,14 @@ void RPN::setInput(std::string &inputStr) {
 /// @param inputStr collected by getline from terminal
 /// @return void
 
-void RPN::getResult(std::string &inputStr) {
+void RPN::getResult(const std::string &inputStr) {
     
     std::stack<double> numberStack;
     double nbr1 = 0;
     double  nbr2 = 0;
     double result = 0;
     
-    for (std::string::iterator it = inputStr.begin(); it != inputStr.end(); ++it ) {
+    for (std::string::const_iterator it = inputStr.begin(); it != inputStr.end(); ++it ) {
         if (isdigit(*it)) {
             numberStack.push(*it -'0');            
         }
@@ -150,13 +150,13 @@ void RPN::getResult(std::string &inputStr) {
             nbr1 = numberStack.top();
             numberStack.pop();
             if (*it == '+')
-            result = safeAdd(nbr1, nbr2);
+                result = safeAdd(nbr1, nbr2);
             else if (*it == '-')
-            result = safeSubtract(nbr1, nbr2);
+                result = safeSubtract(nbr1, nbr2);
             else if (*it == '*') 
-            result = safeMultiply(nbr1, nbr2);
+                result = safeMultiply(nbr1, nbr2);
             else if (*it == '/')
-            result = safeDivide(nbr1, nbr2);
+                result = safeDivide(nbr1, nbr2);
             numberStack.push(result);
         }        
     }
@@ -176,13 +176,13 @@ void RPN::getResult(std::string &inputStr) {
  
 double RPN::safeMultiply(double nbr1, double nbr2) {
 
-    const double D_MIN = -std::numeric_limits<double>::max();
-    const double D_MAX = std::numeric_limits<double>::max();
+    const double doubleMinSize = -std::numeric_limits<double>::max();
+    const double doubleMaxSize =  std::numeric_limits<double>::max();
 
-    if ((nbr1 > 0 && nbr2 > 0 && nbr1 > D_MAX / nbr2) ||    // Positive overflow
-    (nbr1 < 0 && nbr2 < 0 && nbr1 < D_MAX / nbr2) ||        // Negative overflow
-    (nbr1 > 0 && nbr2 < 0 && nbr2 < D_MIN / nbr1) ||        // Mixed underflow
-    (nbr1 < 0 && nbr2 > 0 && nbr1 < D_MIN / nbr2)) {        // Mixed underflow
+    if ((nbr1 > 0 && nbr2 > 0 && nbr1 > doubleMaxSize / nbr2) ||    // Positive overflow
+    (nbr1 < 0 && nbr2 < 0 && nbr1 < doubleMaxSize / nbr2) ||        // Negative overflow
+    (nbr1 > 0 && nbr2 < 0 && nbr2 < doubleMinSize / nbr1) ||        // Mixed underflow
+    (nbr1 < 0 && nbr2 > 0 && nbr1 < doubleMinSize / nbr2)) {        // Mixed underflow
         throw std::runtime_error("Error: Multiplication exceeds double limits!");
     }
     return (nbr1 * nbr2);
@@ -190,11 +190,11 @@ double RPN::safeMultiply(double nbr1, double nbr2) {
 
 double RPN::safeAdd(double nbr1, double nbr2) {
 
-    const double D_MIN = -std::numeric_limits<double>::max();
-    const double D_MAX = std::numeric_limits<double>::max();
+    const double doubleMinSize = -std::numeric_limits<double>::max();
+    const double doubleMaxSize = std::numeric_limits<double>::max();
 
-    if ((nbr1 > 0 && nbr2 > D_MAX - nbr1) ||    // Positive overflow
-    (nbr1 < 0 && nbr2 < D_MIN - nbr1)) {        // Negative overflow
+    if ((nbr1 > 0 && nbr2 > doubleMaxSize - nbr1) ||    // Positive overflow
+    (nbr1 < 0 && nbr2 < doubleMinSize - nbr1)) {        // Negative overflow
         throw std::runtime_error("Error: Addition exceeds double limits!");
     }
     return (nbr1 + nbr2);
@@ -202,11 +202,11 @@ double RPN::safeAdd(double nbr1, double nbr2) {
 
 double RPN::safeSubtract(double nbr1, double nbr2) {
 
-    const double D_MIN = -std::numeric_limits<double>::max();
-    const double D_MAX = std::numeric_limits<double>::max();
+    const double doubleMinSize = -std::numeric_limits<double>::max();
+    const double doubleMaxSize = std::numeric_limits<double>::max();
 
-    if ((nbr1 > 0 && nbr2 < D_MIN + nbr1) ||  // Positive overflow
-        (nbr1 < 0 && nbr2 > D_MAX + nbr1)) {  // Negative overflow
+    if ((nbr1 > 0 && nbr2 < doubleMinSize + nbr1) ||  // Positive overflow
+        (nbr1 < 0 && nbr2 > doubleMaxSize + nbr1)) {  // Negative overflow
         throw std::runtime_error("Error: Subtraction exceeds double limits!");
     }
     return (nbr1 - nbr2);

@@ -6,7 +6,7 @@
 /*   By: nrobinso <nrobinso@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 14:13:15 by nige42            #+#    #+#             */
-/*   Updated: 2025/05/05 17:20:15 by nrobinso         ###   ########.fr       */
+/*   Updated: 2025/05/06 09:10:11 by nrobinso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ class RPN {
         RPN(std::string &inputStr);
         ~RPN(void);
         void setInput(std::string &inputStr);
-        void getResult(std::string &inputStr);
+        void getResult(const std::string &inputStr);
     private:
         std::stack<char> input_;
         RPN(RPN &copy);
