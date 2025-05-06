@@ -6,7 +6,7 @@
 /*   By: nrobinso <nrobinso@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 14:12:53 by nige42            #+#    #+#             */
-/*   Updated: 2025/05/06 13:12:41 by nrobinso         ###   ########.fr       */
+/*   Updated: 2025/05/06 16:03:04 by nrobinso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,9 @@ int main(int argc, char *argv[]) {
         data.setValues(inputStr);
         std::cout << "InputStr: '"<< inputStr << "'" << std::endl;
         data.getValues();
+        data.makePairs();
+
+        
     }
     catch(std::exception &e) {
         std::cout << e.what() << std::endl;

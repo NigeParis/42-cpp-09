@@ -6,7 +6,7 @@
 /*   By: nrobinso <nrobinso@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 08:53:41 by nrobinso          #+#    #+#             */
-/*   Updated: 2025/05/06 12:44:18 by nrobinso         ###   ########.fr       */
+/*   Updated: 2025/05/06 16:39:06 by nrobinso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,15 @@ class PmergeMe  {
         ~PmergeMe(void);
         void setValues(std::string &inputStr);
         void getValues(void);
+        void makePairs(void);
 
 
     private:
 
         std::vector<unsigned int> vector_;
         std::deque <unsigned int> deque_;
+        std::vector<std::pair<unsigned int, unsigned int> > vpair_;
+        unsigned int leftover_;
+        bool leftOverFlag_;
 
-    
 };
