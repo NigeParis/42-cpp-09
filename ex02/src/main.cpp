@@ -6,7 +6,7 @@
 /*   By: nrobinso <nrobinso@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 14:12:53 by nige42            #+#    #+#             */
-/*   Updated: 2025/05/06 12:08:57 by nrobinso         ###   ########.fr       */
+/*   Updated: 2025/05/06 13:12:41 by nrobinso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void checkInput(std::string &inputStr) {
 
     for (std::string::iterator it = inputStr.begin(); it != inputStr.end(); ++it) {
         if (count > 10)
-            throw std::runtime_error("Error: int too big");
+            throw std::runtime_error("Error: input int too big");
         if ((isdigit(*it))) {
             onlySpaces = false;
             count++;
@@ -73,6 +73,7 @@ bool isUnique(const std::vector<std::string> &vec, const std::string &value) {
     return (false);
 }
 
+
 std::string removeDuplicates(const std::string &inputStr) {
     
     std::istringstream inStringStream(inputStr);
@@ -118,8 +119,9 @@ int main(int argc, char *argv[]) {
         checkInput(inputStr);
         removeExtraSpaces(inputStr);
         inputStr = removeDuplicates(inputStr);
-
-        std::cout << "inputStr: '"<< inputStr << "'" << std::endl;
+        data.setValues(inputStr);
+        std::cout << "InputStr: '"<< inputStr << "'" << std::endl;
+        data.getValues();
     }
     catch(std::exception &e) {
         std::cout << e.what() << std::endl;
