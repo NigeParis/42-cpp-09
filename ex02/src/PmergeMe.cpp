@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PmergeMe.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nrobinso <nrobinso@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nige42 <nige42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 08:54:19 by nrobinso          #+#    #+#             */
-/*   Updated: 2025/05/06 17:01:41 by nrobinso         ###   ########.fr       */
+/*   Updated: 2025/05/12 21:17:39 by nige42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,23 @@
 
 PmergeMe::PmergeMe(void) :vector_(0), deque_(0) {std::cout << "Default constructor" << std::endl;};
 PmergeMe::~PmergeMe(void) {std::cout << "Default destructor" << std::endl;};
+
+template <typename T>
+void PmergeMe::swapPairs(T &a, T &b) {
+    T temp;
+    temp = a;
+    a = b;
+    b = temp;
+};
+
+template <typename T>
+void PmergeMe::sortPair(T &a, T &b) {
+
+    if (a < b)
+        swapPairs(a,b);
+};
+
+
 
 static unsigned int stringToUnsignedInt(const std::string &strNumber) {
     const unsigned int uIntMax = std::numeric_limits<unsigned int>::max();
@@ -80,7 +97,7 @@ void PmergeMe::makePairs(void) {
         this->vpair_.push_back(std::make_pair(this->vector_[y], this->vector_[y + 1]));
         y += 2;
     }    
-
+    sortPair(vpair_[0], vpair_[1]);
         
 
     std::cout << "pair->first: " << vpair_[0].first << " pair->second: " << vpair_[0].second << std::endl;    

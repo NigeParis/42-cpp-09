@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PmergeMe.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nrobinso <nrobinso@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nige42 <nige42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 08:53:41 by nrobinso          #+#    #+#             */
-/*   Updated: 2025/05/06 16:39:06 by nrobinso         ###   ########.fr       */
+/*   Updated: 2025/05/12 21:09:00 by nige42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,10 @@ class PmergeMe  {
         void setValues(std::string &inputStr);
         void getValues(void);
         void makePairs(void);
-
+        template <typename T>
+        void swapPairs(T &a, T &b);
+        template <typename T>
+        void sortPair(T &a, T &b);
 
     private:
 
