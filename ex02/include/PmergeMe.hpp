@@ -6,7 +6,7 @@
 /*   By: nige42 <nige42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 08:53:41 by nrobinso          #+#    #+#             */
-/*   Updated: 2025/05/12 21:09:00 by nige42           ###   ########.fr       */
+/*   Updated: 2025/05/12 22:53:18 by nige42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include <string>
 #include <limits>
 #include <algorithm>
+#include <utility>  // For std::pair
 
 
 class PmergeMe  {
@@ -34,6 +35,10 @@ class PmergeMe  {
         void swapPairs(T &a, T &b);
         template <typename T>
         void sortPair(T &a, T &b);
+        template <typename T>
+        void displayContainer(T &container);
+        template <typename T>
+        void displayContainerPairs(T &container);
 
     private:
 

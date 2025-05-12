@@ -6,7 +6,7 @@
 /*   By: nige42 <nige42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 08:54:19 by nrobinso          #+#    #+#             */
-/*   Updated: 2025/05/12 21:17:39 by nige42           ###   ########.fr       */
+/*   Updated: 2025/05/12 23:00:30 by nige42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,13 +97,39 @@ void PmergeMe::makePairs(void) {
         this->vpair_.push_back(std::make_pair(this->vector_[y], this->vector_[y + 1]));
         y += 2;
     }    
-    sortPair(vpair_[0], vpair_[1]);
+    size_t sizev = vpair_.size();
+
+    for (size_t i = 0; i < sizev / 2; ++i)
+        sortPair(vpair_[i].first, vpair_[i].second);
+
+
+
+        
+        sortPair(vpair_[0], vpair_[1]);
         
 
-    std::cout << "pair->first: " << vpair_[0].first << " pair->second: " << vpair_[0].second << std::endl;    
-    std::cout << "pair->first: "  << vpair_[1].first << " pair->second: " << vpair_[1].second << std::endl;    
-    std::cout << "leftOverFlag_: " << leftOverFlag_ << " leftOver_: " << leftover_ << " SIZE: " << size << std::endl;
-    std::cout << "Pair size: " << vpair_.size() / 2 << std::endl;
+  
+   displayContainerPairs(vpair_);
+   displayContainer(deque_);
 };
 
 
+template <typename T>
+void PmergeMe::displayContainer(T &container) {
+    size_t size = container.size();
+
+    for (size_t i = 0; i < size; ++i)
+        std::cout << container[i] << ", ";    
+    std::cout << std::endl;        
+    std::cout << "Size: " << size << std::endl;
+}
+
+template <typename T>
+void PmergeMe::displayContainerPairs(T &container) {
+    size_t size = container.size() / 2;
+    
+    for (size_t i = 0; i < size; ++i)
+        std::cout << "(" << container[i].first << ", " << container[i].second << ") ";    
+    std::cout << std::endl;        
+    std::cout << "Size: " << size << std::endl;
+}
