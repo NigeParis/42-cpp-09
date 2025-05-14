@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PmergeMe.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nrobinso <nrobinso@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nige42 <nige42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 08:54:19 by nrobinso          #+#    #+#             */
-/*   Updated: 2025/05/14 17:16:23 by nrobinso         ###   ########.fr       */
+/*   Updated: 2025/05/14 20:36:06 by nige42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,14 @@ void PmergeMe::sort(T &a, T &b) {
 };
 
 
-
+int jacobsthal(unsigned int n)
+{
+    if (n == 0)
+        return 0;
+    if (n == 1)
+        return 1;
+    return jacobsthal(n - 1) + 2 * jacobsthal(n - 2);
+}
 
 
 static unsigned int stringToUnsignedInt(const std::string &strNumber) {
@@ -122,6 +129,9 @@ void PmergeMe::makeMain(void) {
     main_.insert(main_.begin(), vpair_[0].second);    
     displayContainer(main_);       
     displayContainerPairs(vpair_);
+    for (size_t i = 0; i < vSize * 2; ++i)
+        std::cout << jacobsthal(i) << ", "; 
+    std::cout << std::endl;
 };
 
 
@@ -132,8 +142,16 @@ void PmergeMe::makePend(void) {
         pend_.push_back(vpair_[i].second);
     }
 
-    displayContainer(pend_);       
+    displayContainer(pend_); 
+    
+    std::cout << "Top: " << pend_.front() << std::endl;
 };
+
+
+
+
+
+
 
 
 
