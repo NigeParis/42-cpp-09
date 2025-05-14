@@ -6,7 +6,7 @@
 /*   By: nrobinso <nrobinso@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 14:12:53 by nige42            #+#    #+#             */
-/*   Updated: 2025/05/14 13:45:37 by nrobinso         ###   ########.fr       */
+/*   Updated: 2025/05/14 17:12:51 by nrobinso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,7 @@ int main(int argc, char *argv[]) {
         data.getValues();
         data.makePairs();
         data.makeMain();
+        data.makePend();
 
 
 

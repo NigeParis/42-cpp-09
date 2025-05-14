@@ -6,7 +6,7 @@
 /*   By: nrobinso <nrobinso@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 08:53:41 by nrobinso          #+#    #+#             */
-/*   Updated: 2025/05/14 16:05:08 by nrobinso         ###   ########.fr       */
+/*   Updated: 2025/05/14 17:08:58 by nrobinso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ class PmergeMe  {
         void getValues(void);
         void makePairs(void);
         void makeMain(void);
+        void makePend(void);
         template <typename T>
         void sortPair(T &a, T &b);
         template <typename T>
