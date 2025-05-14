@@ -3,32 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   PmergeMe.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nige42 <nige42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nrobinso <nrobinso@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 08:54:19 by nrobinso          #+#    #+#             */
-/*   Updated: 2025/05/12 23:00:30 by nige42           ###   ########.fr       */
+/*   Updated: 2025/05/14 16:10:02 by nrobinso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/PmergeMe.hpp"
 
-PmergeMe::PmergeMe(void) :vector_(0), deque_(0) {std::cout << "Default constructor" << std::endl;};
+PmergeMe::PmergeMe(void) :vector_(), main_(), pend_(), deque_(), vpair_() {std::cout << "Default constructor" << std::endl;};
 PmergeMe::~PmergeMe(void) {std::cout << "Default destructor" << std::endl;};
-
-template <typename T>
-void PmergeMe::swapPairs(T &a, T &b) {
-    T temp;
-    temp = a;
-    a = b;
-    b = temp;
-};
 
 template <typename T>
 void PmergeMe::sortPair(T &a, T &b) {
 
     if (a < b)
-        swapPairs(a,b);
+         std::swap(a, b);
 };
+
+template <typename T>
+void PmergeMe::sort(T &a, T &b) {
+
+    if (a < b)
+        std::swap(a, b);
+};
+
+
 
 
 
@@ -43,12 +44,15 @@ static unsigned int stringToUnsignedInt(const std::string &strNumber) {
 }
 void PmergeMe::setValues(std::string &inputStr) {
 
+
     std::istringstream inStringStream(inputStr);
     std::string strNumber;
     unsigned int number = 0;
 
     while (inStringStream >> strNumber) {
         number = stringToUnsignedInt(strNumber);
+        if (number == 0)
+            throw std::runtime_error("Error: Not positive integer");
         this->vector_.push_back(number);
         this->deque_.push_back(number);
     }
@@ -81,55 +85,91 @@ void PmergeMe::getValues(void) {
 void PmergeMe::makePairs(void) {
 
     unsigned int size = this->vector_.size();
-    unsigned int y = 0;
-    this->leftover_ = '\0';
+    // unsigned int y = 0;
+    this->leftover_ = 0;
     this->leftOverFlag_ = false;
     
     if (size %2 != 0) {
-        this->leftover_ = this->vector_[size - 1];
-        leftOverFlag_ = true;
-    }
-    for (unsigned int i = 0; i < size; i++) {
-
-        if (i == size - 1 && this->leftOverFlag_ ) {
-            break ;
+        if (!vector_.empty()) {
+            this->leftover_ = this->vector_[size - 1];
+            this->vector_.pop_back();
+            leftOverFlag_ = true;
         }
-        this->vpair_.push_back(std::make_pair(this->vector_[y], this->vector_[y + 1]));
-        y += 2;
+    }
+
+    size = this->vector_.size();
+
+    
+    for (std::vector<unsigned long>::iterator it = vector_.begin(); it != vector_.end(); it++) {
+        vpair_.push_back(std::make_pair(*it, *(++it)));
+        
     }    
-    size_t sizev = vpair_.size();
 
-    for (size_t i = 0; i < sizev / 2; ++i)
-        sortPair(vpair_[i].first, vpair_[i].second);
-
-
-
+    
+    
+    
+    size_t vSize = vpair_.size();
+    for (size_t i = 0; i < vSize; i++)
+    sortPair(vpair_[i].first, vpair_[i].second);
+    
+    
+    for (unsigned int i = 0; i < vSize; ++i) {
+        for (unsigned int y = 0; y < vSize; ++y) {
+            
+            
+            
+            sortPair(vpair_[i], vpair_[y]);
+            
+        }
         
-        sortPair(vpair_[0], vpair_[1]);
+    }
+    
+    displayContainerPairs(vpair_);
         
-
-  
-   displayContainerPairs(vpair_);
-   displayContainer(deque_);
+};
+    
+    
+    
+    
+void PmergeMe::makeMain(void) {
+        
+        
+    size_t vSize = vpair_.size();
+        
+        
+    for (size_t i = 0; i < vSize; ++i) {     
+        main_.push_back(vpair_[i].first);
+    }
+    main_.insert(main_.begin(), vpair_[0].second);    
+        
+    displayContainer(main_);       
 };
 
 
-template <typename T>
-void PmergeMe::displayContainer(T &container) {
-    size_t size = container.size();
 
-    for (size_t i = 0; i < size; ++i)
-        std::cout << container[i] << ", ";    
+
+
+
+
+
+
+template <typename T>
+void PmergeMe::displayContainer(T &container) {\
+            
+    std::cout << "Container:  ";
+    for (typename T::iterator it = container.begin(); it != container.end(); ++it) {
+        std::cout << *it << ", ";
+    }            
     std::cout << std::endl;        
-    std::cout << "Size: " << size << std::endl;
 }
+
+
+
 
 template <typename T>
 void PmergeMe::displayContainerPairs(T &container) {
-    size_t size = container.size() / 2;
-    
-    for (size_t i = 0; i < size; ++i)
-        std::cout << "(" << container[i].first << ", " << container[i].second << ") ";    
-    std::cout << std::endl;        
-    std::cout << "Size: " << size << std::endl;
+    for (typename T::iterator it = container.begin(); it != container.end(); ++it) {
+        std::cout << "(" << (*it).first << ", " << (*it).second << ") ";
+    }
+    std::cout << std::endl;
 }
