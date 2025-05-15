@@ -6,7 +6,7 @@
 /*   By: nige42 <nige42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 14:12:53 by nige42            #+#    #+#             */
-/*   Updated: 2025/05/15 13:11:16 by nige42           ###   ########.fr       */
+/*   Updated: 2025/05/15 16:35:57 by nige42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,12 @@ std::string removeDuplicates(const std::string &inputStr) {
 }
 
 
+double calTimeDiff(clock_t &startTime, clock_t &endTime) {
+
+    return (static_cast<double>(endTime - startTime) * 1000000.0 ) / CLOCKS_PER_SEC;        
+}
+
+
 int main(int argc, char *argv[]) {
 
     PmergeMe data;
@@ -113,23 +119,41 @@ int main(int argc, char *argv[]) {
             if (i < argc - 1)
             lineOfArgs << " ";
         }
+        clock_t parsingStartTime = clock();
         std::getline(lineOfArgs, inputStr);
-        
-        
         checkInput(inputStr);
         removeExtraSpaces(inputStr);
         inputStr = removeDuplicates(inputStr);
-        data.setValues(inputStr);
-        std::cout << "InputStr: '"<< inputStr << "'" << std::endl;
-        //data.getValues();
-        data.makePairs();
-        data.makeMain();
-        data.makePend();
-        data.mergeMainWithPend();
+        clock_t parsingEndTime = clock();
+        data.vecTime = calTimeDiff(parsingStartTime, parsingEndTime);
+        data.deqTime = calTimeDiff(parsingStartTime, parsingEndTime);
 
+        clock_t vecStartTime = clock(); // Start timing
+        data.vecSetValues(inputStr);
+        data.vecMakePairs();
+        data.vecMakeMain();
+        data.vecMakePend();
+        data.vecMergeMainWithPend();
+        clock_t vecEndTime = clock(); // End timing
+        data.vecTime += calTimeDiff(vecStartTime, vecEndTime);
+        
+        clock_t deqStartTime = clock(); // Start timing
+        data.deqSetValues(inputStr);
+        data.deqMakePairs();
+        data.deqMakeMain();
+        data.deqMakePend();
+        data.deqMergeMainWithPend();
+
+        
+        clock_t deqEndTime = clock(); // End timing
+        data.deqTime += calTimeDiff(deqStartTime, deqEndTime);
 
 
         
+        data.getBeforeValues();
+        data.getAfterValues();
+        data.getVecTimes();
+        data.getDeqTimes();
     }
     catch(std::exception &e) {
         std::cout << e.what() << std::endl;
