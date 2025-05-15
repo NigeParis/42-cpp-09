@@ -6,7 +6,7 @@
 /*   By: nige42 <nige42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 08:54:19 by nrobinso          #+#    #+#             */
-/*   Updated: 2025/05/15 22:49:55 by nige42           ###   ########.fr       */
+/*   Updated: 2025/05/15 22:52:11 by nige42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,10 +61,6 @@ PmergeMe::~PmergeMe(void) {
     this->dJacLadder_.clear();
     this->vpair_.clear();
     this->dpair_.clear();
-    this->vecTime_ = 0;
-    this->deqTime_ = 0;
-    this->leftover_ = 0;
-    this->leftOverFlag_ = 0;
 };
 
 /**
