@@ -6,7 +6,7 @@
 /*   By: nige42 <nige42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 08:54:19 by nrobinso          #+#    #+#             */
-/*   Updated: 2025/05/15 22:45:48 by nige42           ###   ########.fr       */
+/*   Updated: 2025/05/15 22:49:55 by nige42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void PmergeMe::sortPair(T &a, T &b) {
 };
 
 /**
-* STD-DEQUE FUNCTIONS
+* STD-VECTOR FUNCTIONS
 **/
 
 void PmergeMe::vecSetValues(std::string &inputStr) {
