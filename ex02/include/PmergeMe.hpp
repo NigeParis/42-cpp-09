@@ -6,7 +6,7 @@
 /*   By: nige42 <nige42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 08:53:41 by nrobinso          #+#    #+#             */
-/*   Updated: 2025/05/15 16:47:41 by nige42           ###   ########.fr       */
+/*   Updated: 2025/05/15 22:27:13 by nige42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,10 @@ class PmergeMe  {
     public:
 
         PmergeMe(void);
+        PmergeMe(PmergeMe &copy);
+        PmergeMe &operator=(PmergeMe &other);
         ~PmergeMe(void);
+        
         void getBeforeValues(void);
         void getAfterValues(void);
         void vecSetValues(std::string &inputStr);
@@ -66,8 +69,8 @@ class PmergeMe  {
         void displayContainer(T &container);
         template <typename T>
         void displayContainerPairs(T &container);
-        double vecTime;
-        double deqTime;
+        double vecTime_;
+        double deqTime_;
         
     private:
 

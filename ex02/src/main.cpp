@@ -6,12 +6,11 @@
 /*   By: nige42 <nige42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 14:12:53 by nige42            #+#    #+#             */
-/*   Updated: 2025/05/15 17:07:52 by nige42           ###   ########.fr       */
+/*   Updated: 2025/05/15 22:20:37 by nige42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/PmergeMe.hpp"
-
 
 void checkInput(std::string &inputStr) {
 
@@ -73,7 +72,6 @@ bool isUnique(const std::vector<std::string> &vec, const std::string &value) {
     return (false);
 }
 
-
 std::string removeDuplicates(const std::string &inputStr) {
     
     std::istringstream inStringStream(inputStr);
@@ -96,12 +94,10 @@ std::string removeDuplicates(const std::string &inputStr) {
     return result;
 }
 
-
 double calTimeDiff(clock_t &startTime, clock_t &endTime) {
 
     return (static_cast<double>(endTime - startTime) * 1000000.0 ) / CLOCKS_PER_SEC;        
 }
-
 
 int main(int argc, char *argv[]) {
 
@@ -114,6 +110,7 @@ int main(int argc, char *argv[]) {
         return -1;
     }
     try {
+        
         for (int i = 1; i < argc; i++) {
             lineOfArgs << argv[i];
             if (i < argc - 1)
@@ -125,9 +122,8 @@ int main(int argc, char *argv[]) {
         removeExtraSpaces(inputStr);
         inputStr = removeDuplicates(inputStr);
         clock_t parsingEndTime = clock();
-        data.vecTime = calTimeDiff(parsingStartTime, parsingEndTime);
-        data.deqTime = calTimeDiff(parsingStartTime, parsingEndTime);
-
+        data.vecTime_ = calTimeDiff(parsingStartTime, parsingEndTime);
+        data.deqTime_ = calTimeDiff(parsingStartTime, parsingEndTime);
         clock_t vecStartTime = clock(); // Start timing
         data.vecSetValues(inputStr);
         data.vecMakePairs();
@@ -135,21 +131,15 @@ int main(int argc, char *argv[]) {
         data.vecMakePend();
         data.vecMergeMainWithPend();
         clock_t vecEndTime = clock(); // End timing
-        data.vecTime += calTimeDiff(vecStartTime, vecEndTime);
-        
+        data.vecTime_ += calTimeDiff(vecStartTime, vecEndTime);
         clock_t deqStartTime = clock(); // Start timing
         data.deqSetValues(inputStr);
         data.deqMakePairs();
         data.deqMakeMain();
         data.deqMakePend();
         data.deqMergeMainWithPend();
-
-        
         clock_t deqEndTime = clock(); // End timing
-        data.deqTime += calTimeDiff(deqStartTime, deqEndTime);
-
-
-        
+        data.deqTime_ += calTimeDiff(deqStartTime, deqEndTime);
         data.getBeforeValues();
         data.getAfterValues();
         data.getVecTimes();
@@ -158,9 +148,5 @@ int main(int argc, char *argv[]) {
     catch(std::exception &e) {
         std::cout << e.what() << std::endl;
     }   
-
-   
-
-
     return 0;
 }
