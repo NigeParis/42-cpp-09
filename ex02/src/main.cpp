@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nrobinso <nrobinso@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nige42 <nige42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 14:12:53 by nige42            #+#    #+#             */
-/*   Updated: 2025/05/14 17:12:51 by nrobinso         ###   ########.fr       */
+/*   Updated: 2025/05/15 13:11:16 by nige42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ int main(int argc, char *argv[]) {
     std::stringstream lineOfArgs;
     std::string inputStr = "";
     
-    if (argc < 2) {
+    if (argc < 1) {
         std::cout << "./PmergeMe \"[NUM] [NUM] etc..." << std::endl;
         return -1;
     }
@@ -121,11 +121,11 @@ int main(int argc, char *argv[]) {
         inputStr = removeDuplicates(inputStr);
         data.setValues(inputStr);
         std::cout << "InputStr: '"<< inputStr << "'" << std::endl;
-        data.getValues();
+        //data.getValues();
         data.makePairs();
         data.makeMain();
         data.makePend();
-
+        data.mergeMainWithPend();
 
 
 

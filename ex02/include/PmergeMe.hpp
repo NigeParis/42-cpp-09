@@ -6,7 +6,7 @@
 /*   By: nige42 <nige42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 08:53:41 by nrobinso          #+#    #+#             */
-/*   Updated: 2025/05/14 20:17:27 by nige42           ###   ########.fr       */
+/*   Updated: 2025/05/15 13:11:57 by nige42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,24 +36,28 @@ class PmergeMe  {
         template <typename T>
         void sortPair(T &a, T &b);
         template <typename T>
-        void sort(T &a, T &b);
-        template <typename T>
         void displayContainer(T &container);
         template <typename T>
         void displayContainerPairs(T &container);
+        void mergeJacob(void);
+        void makeJacobsthalLadder(void);
+        void mergeMainWithPend(void);
         template <typename T>
-        int Jacobsthal(int k);
+        void insertLastElement(T &container);
 
     private:
 
-        std::vector<unsigned long> vector_;
-        std::vector<unsigned long> main_;
-        std::vector<unsigned long> pend_;
-        std::deque <unsigned long> deque_;
-        std::vector<std::pair<unsigned long, unsigned long> > vpair_;
+        std::vector<unsigned int> vector_;
+        std::vector<unsigned int> vMain_;
+        std::vector<unsigned int> vPend_;
+        std::deque <unsigned int> deque_;
+        std::vector<unsigned int> dMain_;
+        std::vector<unsigned int> dPend_;
+        std::vector<std::pair<unsigned int, unsigned int> > vpair_;
+        std::vector<unsigned int> jacLadder_;
 
 
-        unsigned long leftover_;
+        unsigned int leftover_;
         bool leftOverFlag_;
 
 };
