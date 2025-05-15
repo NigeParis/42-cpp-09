@@ -6,7 +6,7 @@
 /*   By: nige42 <nige42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 14:12:53 by nige42            #+#    #+#             */
-/*   Updated: 2025/05/15 16:35:57 by nige42           ###   ########.fr       */
+/*   Updated: 2025/05/15 17:07:52 by nige42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ int main(int argc, char *argv[]) {
     std::stringstream lineOfArgs;
     std::string inputStr = "";
     
-    if (argc < 1) {
+    if (argc < 2) {
         std::cout << "./PmergeMe \"[NUM] [NUM] etc..." << std::endl;
         return -1;
     }

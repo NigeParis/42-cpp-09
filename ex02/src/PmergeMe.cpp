@@ -6,7 +6,7 @@
 /*   By: nige42 <nige42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 08:54:19 by nrobinso          #+#    #+#             */
-/*   Updated: 2025/05/15 16:55:55 by nige42           ###   ########.fr       */
+/*   Updated: 2025/05/15 17:03:07 by nige42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -426,7 +426,7 @@ void PmergeMe::getDeqTimes(void) {
         this->deque_.push_back(leftover_);
     }
     std::cout << "Time to process a range of " 
-    << this->deque_.size() << " elements with std::deque : " 
+    << this->deque_.size() << " elements with std::deque  : " 
     << this->deqTime << " µs" << std::endl;
 };
 
