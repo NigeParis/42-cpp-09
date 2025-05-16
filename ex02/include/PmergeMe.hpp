@@ -6,7 +6,7 @@
 /*   By: nrobinso <nrobinso@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 08:53:41 by nrobinso          #+#    #+#             */
-/*   Updated: 2025/05/16 08:07:00 by nrobinso         ###   ########.fr       */
+/*   Updated: 2025/05/16 09:01:03 by nrobinso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,22 +51,17 @@ class PmergeMe  {
         void vecMergeMainWithPend(void);
         void vecInsertLastElement(void);
         void getVecTimes(void);
-        void vecReplaceVecWithMain(void);
-
-        
+        void vecReplaceVecWithMain(void);        
         void deqSetValues(std::string &inputStr);
         void deqMakePairs(void);
         void deqMakeMain(void);
         void deqMakePend(void);
-
         void deqMakeJacobsthalLadder(void);
         void deqMergeJacob(void);
         void deqMergeMainWithPend(void);
         void deqInsertLastElement(void);
         void deqReplaceDeqWithMain(void);
-
         void getDeqTimes(void);
-        
         template <typename T>
         void sortPair(T &a, T &b);
         template <typename T>
@@ -83,14 +78,11 @@ class PmergeMe  {
         std::vector<unsigned int> vMain_;
         std::vector<unsigned int> vPend_;
         std::vector<unsigned int> vJacLadder_;
-        
         std::deque <unsigned int> deque_;
         std::deque<std::pair<unsigned int, unsigned int> > dpair_;
         std::deque<unsigned int> dMain_;
         std::deque<unsigned int> dPend_;
         std::deque<unsigned int> dJacLadder_;
-
-
         unsigned int leftover_;
         bool leftOverFlag_;
 
