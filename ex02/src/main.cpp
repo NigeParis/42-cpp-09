@@ -3,14 +3,90 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nige42 <nige42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nrobinso <nrobinso@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 14:12:53 by nige42            #+#    #+#             */
-/*   Updated: 2025/05/15 22:20:37 by nige42           ###   ########.fr       */
+/*   Updated: 2025/05/16 08:50:07 by nrobinso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/PmergeMe.hpp"
+
+void checkInput(std::string &inputStr);
+void removeExtraSpaces(std::string &inputStr);
+bool isUnique(const std::vector<std::string> &vec, const std::string &value);
+double calTimeDiff(clock_t &startTime, clock_t &endTime);
+std::string removeDuplicates(const std::string &inputStr);
+
+int main(int argc, char *argv[]) {
+
+    PmergeMe data;
+    std::stringstream lineOfArgs;
+    std::string inputStr = "";
+    clock_t parsingStartTime;
+    clock_t parsingEndTime;
+    clock_t vecStartTime;
+    clock_t vecEndTime;
+    clock_t deqStartTime;
+    clock_t deqEndTime;
+
+    if (argc < 2) {
+        std::cout << "./PmergeMe \"[NUM] [NUM] etc..." << std::endl;
+        return -1;
+    }
+    try {
+        
+        for (int i = 1; i < argc; i++) {
+            lineOfArgs << argv[i];
+            if (i < argc - 1)
+            lineOfArgs << " ";
+        }
+        parsingStartTime = clock();
+        std::getline(lineOfArgs, inputStr);
+        checkInput(inputStr);
+        removeExtraSpaces(inputStr);
+        inputStr = removeDuplicates(inputStr);
+        parsingEndTime = clock();
+        data.vecTime_ = calTimeDiff(parsingStartTime, parsingEndTime);
+        data.deqTime_ = calTimeDiff(parsingStartTime, parsingEndTime);
+        vecStartTime = clock();
+        data.vecSetValues(inputStr);
+        data.vecMakePairs();
+        data.vecMakeMain();
+        data.vecMakePend();
+        data.vecMergeMainWithPend();
+        vecEndTime = clock();
+        data.vecTime_ += calTimeDiff(vecStartTime, vecEndTime);
+        deqStartTime = clock();
+        data.deqSetValues(inputStr);
+        data.deqMakePairs();
+        data.deqMakeMain();
+        data.deqMakePend();
+        data.deqMergeMainWithPend();
+        deqEndTime = clock();
+        data.deqTime_ += calTimeDiff(deqStartTime, deqEndTime);
+        data.getBeforeValues();
+        vecStartTime = clock();
+        data.vecReplaceVecWithMain();
+        vecEndTime = clock();
+        data.vecTime_ += calTimeDiff(vecStartTime, vecEndTime);
+        deqStartTime = clock();
+        data.deqReplaceDeqWithMain();
+        deqEndTime = clock();
+        data.deqTime_ += calTimeDiff(deqStartTime, deqEndTime);
+        data.getAfterValues();
+        data.getVecTimes();
+        data.getDeqTimes();
+    }
+    catch(std::exception &e) {
+        std::cout << e.what() << std::endl;
+    }   
+    return 0;
+}
+
+/**
+* HELPER FUNCTIONS
+**/
 
 void checkInput(std::string &inputStr) {
 
@@ -97,56 +173,4 @@ std::string removeDuplicates(const std::string &inputStr) {
 double calTimeDiff(clock_t &startTime, clock_t &endTime) {
 
     return (static_cast<double>(endTime - startTime) * 1000000.0 ) / CLOCKS_PER_SEC;        
-}
-
-int main(int argc, char *argv[]) {
-
-    PmergeMe data;
-    std::stringstream lineOfArgs;
-    std::string inputStr = "";
-    
-    if (argc < 2) {
-        std::cout << "./PmergeMe \"[NUM] [NUM] etc..." << std::endl;
-        return -1;
-    }
-    try {
-        
-        for (int i = 1; i < argc; i++) {
-            lineOfArgs << argv[i];
-            if (i < argc - 1)
-            lineOfArgs << " ";
-        }
-        clock_t parsingStartTime = clock();
-        std::getline(lineOfArgs, inputStr);
-        checkInput(inputStr);
-        removeExtraSpaces(inputStr);
-        inputStr = removeDuplicates(inputStr);
-        clock_t parsingEndTime = clock();
-        data.vecTime_ = calTimeDiff(parsingStartTime, parsingEndTime);
-        data.deqTime_ = calTimeDiff(parsingStartTime, parsingEndTime);
-        clock_t vecStartTime = clock(); // Start timing
-        data.vecSetValues(inputStr);
-        data.vecMakePairs();
-        data.vecMakeMain();
-        data.vecMakePend();
-        data.vecMergeMainWithPend();
-        clock_t vecEndTime = clock(); // End timing
-        data.vecTime_ += calTimeDiff(vecStartTime, vecEndTime);
-        clock_t deqStartTime = clock(); // Start timing
-        data.deqSetValues(inputStr);
-        data.deqMakePairs();
-        data.deqMakeMain();
-        data.deqMakePend();
-        data.deqMergeMainWithPend();
-        clock_t deqEndTime = clock(); // End timing
-        data.deqTime_ += calTimeDiff(deqStartTime, deqEndTime);
-        data.getBeforeValues();
-        data.getAfterValues();
-        data.getVecTimes();
-        data.getDeqTimes();
-    }
-    catch(std::exception &e) {
-        std::cout << e.what() << std::endl;
-    }   
-    return 0;
 }

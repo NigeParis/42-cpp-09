@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PmergeMe.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nige42 <nige42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nrobinso <nrobinso@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 08:54:19 by nrobinso          #+#    #+#             */
-/*   Updated: 2025/05/15 22:52:11 by nige42           ###   ########.fr       */
+/*   Updated: 2025/05/16 08:21:18 by nrobinso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ void PmergeMe::getBeforeValues(void) {
 
 void PmergeMe::getAfterValues(void) {
 
-    unsigned int vSize = this->vMain_.size();
+    unsigned int vSize = this->vector_.size();
     unsigned int charcount = 0;
     
     std::cout << "After:  ";
@@ -130,11 +130,11 @@ void PmergeMe::getAfterValues(void) {
             break ;
         }        
         if (i == 0) {
-            std::cout << this->vMain_[i];
-            charcount += countDigitsString(this->vMain_[i]);        
+            std::cout << this->vector_[i];
+            charcount += countDigitsString(this->vector_[i]);        
         } else {
-            std::cout << " " << this->vMain_[i];
-            charcount += countDigitsString(this->vMain_[i]) + 1;        
+            std::cout << " " << this->vector_[i];
+            charcount += countDigitsString(this->vector_[i]) + 1;        
         }
     }
     std::cout << std::endl;
@@ -209,6 +209,16 @@ void PmergeMe::vecMergeMainWithPend(void) {
     vecInsertLastElement();    
 };
 
+void PmergeMe::vecReplaceVecWithMain(void) {
+
+    this->vector_.clear();
+    this->vector_.insert(this->vector_.begin(), this->vMain_.begin(), this->vMain_.end());
+    this->vMain_.clear();
+    this->vPend_.clear();
+    this->vJacLadder_.clear();
+    this->vpair_.clear();    
+};
+
 void PmergeMe::vecMergeJacob(void) {
     
     vJacLadder_.clear();
@@ -257,6 +267,13 @@ void PmergeMe::vecInsertLastElement(void) {
         std::lower_bound(vMain_.begin(), vMain_.end(), leftover_);
         vMain_.insert(pos, leftover_);
     }
+};
+
+void PmergeMe::getVecTimes(void) {
+    
+    std::cout << "Time to process a range of " 
+    << this->vector_.size() << " elements with std::vector : " 
+    << this->vecTime_ << " µs" << std::endl;
 };
 
 /**
@@ -359,18 +376,18 @@ void PmergeMe::deqMergeMainWithPend(void) {
     deqInsertLastElement();    
 };
 
-void PmergeMe::getVecTimes(void) {
-    
-    std::cout << "Time to process a range of " 
-    << this->vector_.size() << " elements with std::vector : " 
-    << this->vecTime_ << " µs" << std::endl;
+void PmergeMe::deqReplaceDeqWithMain(void) {
+
+    this->deque_.clear();
+    this->deque_.insert(this->deque_.begin(), this->dMain_.begin(), this->dMain_.end());
+    this->dMain_.clear();
+    this->dPend_.clear();
+    this->dJacLadder_.clear();
+    this->dpair_.clear();    
 };
 
 void PmergeMe::getDeqTimes(void) {
 
-    if (leftover_) {
-        this->deque_.push_back(leftover_);
-    }
     std::cout << "Time to process a range of " 
     << this->deque_.size() << " elements with std::deque  : " 
     << this->deqTime_ << " µs" << std::endl;
@@ -424,7 +441,7 @@ static unsigned int stringToUnsignedInt(const std::string &strNumber) {
     size_t number = 0;
     streamString >> number;
     if (number > uIntMax)
-        throw std::runtime_error("Error: input unsigned int too big");
+        throw std::runtime_error("Error: input int too big");
     return ((unsigned int)number);
 }
 

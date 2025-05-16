@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PmergeMe.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nige42 <nige42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nrobinso <nrobinso@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 08:53:41 by nrobinso          #+#    #+#             */
-/*   Updated: 2025/05/15 22:27:13 by nige42           ###   ########.fr       */
+/*   Updated: 2025/05/16 08:07:00 by nrobinso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ class PmergeMe  {
         void vecMergeMainWithPend(void);
         void vecInsertLastElement(void);
         void getVecTimes(void);
+        void vecReplaceVecWithMain(void);
+
         
         void deqSetValues(std::string &inputStr);
         void deqMakePairs(void);
@@ -61,6 +63,8 @@ class PmergeMe  {
         void deqMergeJacob(void);
         void deqMergeMainWithPend(void);
         void deqInsertLastElement(void);
+        void deqReplaceDeqWithMain(void);
+
         void getDeqTimes(void);
         
         template <typename T>
