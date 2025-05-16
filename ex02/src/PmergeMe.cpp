@@ -6,7 +6,7 @@
 /*   By: nrobinso <nrobinso@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 08:54:19 by nrobinso          #+#    #+#             */
-/*   Updated: 2025/05/16 08:21:18 by nrobinso         ###   ########.fr       */
+/*   Updated: 2025/05/16 08:55:49 by nrobinso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 static unsigned int jacobsthal(unsigned int n);
 static unsigned int countDigitsString(unsigned int num);
 static unsigned int stringToUnsignedInt(const std::string &strNumber);
-
 
 PmergeMe::PmergeMe(void) :vector_(), vpair_(), vMain_(), vPend_(),  vJacLadder_(), 
 deque_(), dMain_(), dPend_() {
