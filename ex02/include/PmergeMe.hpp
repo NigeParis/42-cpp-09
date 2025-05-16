@@ -6,7 +6,7 @@
 /*   By: nrobinso <nrobinso@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 08:53:41 by nrobinso          #+#    #+#             */
-/*   Updated: 2025/05/16 09:01:03 by nrobinso         ###   ########.fr       */
+/*   Updated: 2025/05/16 09:09:53 by nrobinso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,10 @@
 #include <string>
 #include <limits>
 #include <algorithm>
-#include <utility>  // For std::pair
+#include <utility>
 #include <ctime>
 #include <time.h>
-#include <sys/time.h> // Required for gettimeofday()
-
-#include <iomanip> // for set precision std::cout
-
 #include <unistd.h>
-
-
 #define DISPLAYLIMIT 30
 
 class PmergeMe  {
@@ -85,5 +79,4 @@ class PmergeMe  {
         std::deque<unsigned int> dJacLadder_;
         unsigned int leftover_;
         bool leftOverFlag_;
-
 };

@@ -6,7 +6,7 @@
 /*   By: nrobinso <nrobinso@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 08:54:19 by nrobinso          #+#    #+#             */
-/*   Updated: 2025/05/16 08:55:49 by nrobinso         ###   ########.fr       */
+/*   Updated: 2025/05/16 09:23:38 by nrobinso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,9 @@ static unsigned int jacobsthal(unsigned int n);
 static unsigned int countDigitsString(unsigned int num);
 static unsigned int stringToUnsignedInt(const std::string &strNumber);
 
-PmergeMe::PmergeMe(void) :vector_(), vpair_(), vMain_(), vPend_(),  vJacLadder_(), 
-deque_(), dMain_(), dPend_() {
+PmergeMe::PmergeMe(void) : vecTime_(0), deqTime_(0), vector_(), vpair_(), vMain_(), vPend_(),  vJacLadder_(), 
+deque_(), dMain_(), dPend_(), dJacLadder_(), leftover_(0), leftOverFlag_(false) {
     //std::cout << "Default constructor" << std::endl;
-    this->vecTime_ = 0;
 };
 
 PmergeMe::PmergeMe(PmergeMe &copy) {
@@ -68,7 +67,6 @@ PmergeMe::~PmergeMe(void) {
 
 template <typename T>
 void PmergeMe::sortPair(T &a, T &b) {
-
     if (a < b)
          std::swap(a, b);
 };
@@ -78,7 +76,6 @@ void PmergeMe::sortPair(T &a, T &b) {
 **/
 
 void PmergeMe::vecSetValues(std::string &inputStr) {
-
     std::istringstream inStringStream(inputStr);
     std::string strNumber;
     unsigned int number = 0;
@@ -92,7 +89,6 @@ void PmergeMe::vecSetValues(std::string &inputStr) {
 };
 
 void PmergeMe::getBeforeValues(void) {
-
     unsigned int vSize = this->vector_.size();
     unsigned int charcount = 0;
     
@@ -118,7 +114,6 @@ void PmergeMe::getBeforeValues(void) {
 };
 
 void PmergeMe::getAfterValues(void) {
-
     unsigned int vSize = this->vector_.size();
     unsigned int charcount = 0;
     
@@ -140,7 +135,6 @@ void PmergeMe::getAfterValues(void) {
 };
 
 void PmergeMe::vecMakePairs(void) {
-
     unsigned int size = this->vector_.size();
     this->leftover_ = 0;
     this->leftOverFlag_ = false;
@@ -163,8 +157,8 @@ void PmergeMe::vecMakePairs(void) {
 };
     
 void PmergeMe::vecMakeMain(void) {
-       
     unsigned int vSize = vpair_.size();
+    
     if (vSize == 0) {
         return ;        
     }
@@ -182,8 +176,8 @@ void PmergeMe::vecMakeMain(void) {
 };
 
 void PmergeMe::vecMakePend(void) {
-
     unsigned int vSize = vpair_.size();
+    
     for (unsigned int i = 1; i < vSize; i++) {  
         if (vpair_[i].second)   
             vPend_.push_back(vpair_[i].second);
@@ -203,13 +197,11 @@ void PmergeMe::vecMakeJacobsthalLadder(void) {
 };
 
 void PmergeMe::vecMergeMainWithPend(void) {
-    
     vecMergeJacob();   
     vecInsertLastElement();    
 };
 
 void PmergeMe::vecReplaceVecWithMain(void) {
-
     this->vector_.clear();
     this->vector_.insert(this->vector_.begin(), this->vMain_.begin(), this->vMain_.end());
     this->vMain_.clear();
@@ -219,7 +211,6 @@ void PmergeMe::vecReplaceVecWithMain(void) {
 };
 
 void PmergeMe::vecMergeJacob(void) {
-    
     vJacLadder_.clear();
     std::vector<bool> inserted(vPend_.size());
     std::fill(inserted.begin(), inserted.end(), false);
@@ -260,7 +251,6 @@ void PmergeMe::vecMergeJacob(void) {
 }
 
 void PmergeMe::vecInsertLastElement(void) {
-
     if (leftOverFlag_ ) {
         std::vector<unsigned int>::iterator pos = 
         std::lower_bound(vMain_.begin(), vMain_.end(), leftover_);
@@ -269,7 +259,6 @@ void PmergeMe::vecInsertLastElement(void) {
 };
 
 void PmergeMe::getVecTimes(void) {
-    
     std::cout << "Time to process a range of " 
     << this->vector_.size() << " elements with std::vector : " 
     << this->vecTime_ << " µs" << std::endl;
@@ -279,8 +268,7 @@ void PmergeMe::getVecTimes(void) {
 * STD-DEQUE FUNCTIONS
 **/
 
-void PmergeMe::deqMergeJacob(void) {
-    
+void PmergeMe::deqMergeJacob(void) {  
     dJacLadder_.clear();
     std::vector<bool> inserted(dPend_.size());
     std::fill(inserted.begin(), inserted.end(), false);
@@ -321,7 +309,6 @@ void PmergeMe::deqMergeJacob(void) {
 };
 
 void PmergeMe::deqInsertLastElement(void) {
-
     if (leftOverFlag_ ) {
         std::deque<unsigned int>::iterator pos = 
         std::lower_bound(dMain_.begin(), dMain_.end(), leftover_);
@@ -342,7 +329,6 @@ void PmergeMe::deqMakeJacobsthalLadder(void) {
 };
 
 void PmergeMe::deqMakePend(void) {
-
     unsigned int dSize = dpair_.size();
     for (unsigned int i = 1; i < dSize; i++) {  
         if (dpair_[i].second)   
@@ -350,8 +336,7 @@ void PmergeMe::deqMakePend(void) {
     }
 };
 
-void PmergeMe::deqMakeMain(void) {
-       
+void PmergeMe::deqMakeMain(void) {    
     unsigned int dSize = dpair_.size();
     if (dSize == 0) {
         return ;        
@@ -369,14 +354,12 @@ void PmergeMe::deqMakeMain(void) {
         dMain_.insert(dMain_.begin(), dpair_[0].second);
 };
 
-void PmergeMe::deqMergeMainWithPend(void) {
-    
+void PmergeMe::deqMergeMainWithPend(void) {    
     deqMergeJacob();   
     deqInsertLastElement();    
 };
 
 void PmergeMe::deqReplaceDeqWithMain(void) {
-
     this->deque_.clear();
     this->deque_.insert(this->deque_.begin(), this->dMain_.begin(), this->dMain_.end());
     this->dMain_.clear();
@@ -386,14 +369,12 @@ void PmergeMe::deqReplaceDeqWithMain(void) {
 };
 
 void PmergeMe::getDeqTimes(void) {
-
     std::cout << "Time to process a range of " 
     << this->deque_.size() << " elements with std::deque  : " 
     << this->deqTime_ << " µs" << std::endl;
 };
 
 void PmergeMe::deqMakePairs(void) {
-
     unsigned int size = this->deque_.size();
     this->leftover_ = 0;
     this->leftOverFlag_ = false;
@@ -425,8 +406,7 @@ static unsigned int countDigitsString(unsigned int num) {
     return oss.str().size();
 }
 
-static unsigned int jacobsthal(unsigned int n)
-{
+static unsigned int jacobsthal(unsigned int n) {
     if (n == 0)
         return 0;
     if (n == 1)
@@ -445,8 +425,6 @@ static unsigned int stringToUnsignedInt(const std::string &strNumber) {
 }
 
 void PmergeMe::deqSetValues(std::string &inputStr) {
-
-
     std::istringstream inStringStream(inputStr);
     std::string strNumber;
     unsigned int number = 0;
@@ -464,7 +442,7 @@ void PmergeMe::deqSetValues(std::string &inputStr) {
 **/
 
 template <typename T>
-void PmergeMe::displayContainer(T &container) {\
+void PmergeMe::displayContainer(T &container) {
             
     std::cout << "Container:  ";
     for (typename T::iterator it = container.begin(); it != container.end(); ++it) {
