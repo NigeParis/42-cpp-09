@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   BitcoinExchange.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nige42 <nige42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nrobinso <nrobinso@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 08:56:33 by nrobinso          #+#    #+#             */
-/*   Updated: 2025/05/02 13:54:52 by nige42           ###   ########.fr       */
+/*   Updated: 2025/05/16 12:32:46 by nrobinso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -238,16 +238,12 @@ void BitcoinExchange::getDateLong(void) {
     this->datelong_ = atoi(temp.c_str());
 };
 
-static  std::ifstream openfile(std::string const &file) {
-
-    std::ifstream inputdatafile;
-    inputdatafile.open(file);
-    
+void openfile(const std::string &file, std::ifstream &inputdatafile) {
+    inputdatafile.open(file.c_str());
     if (!inputdatafile.is_open()) {
-        throw std::out_of_range("Error: could not open file.");        
-    };
-    return (inputdatafile);
-};
+        throw std::out_of_range("Error: could not open file.");
+    }
+}
 
 void BitcoinExchange::getAndCheckData(void) {
     //std::cout << "getAndCheckData() called" << std::endl;
@@ -258,7 +254,7 @@ void BitcoinExchange::getAndCheckData(void) {
     int errorsFound = 0;
         
     try {
-        inputdatafile = openfile(DATABASE);
+        openfile(DATABASE, inputdatafile);
     }
     catch(std::exception &e) {
         std::cerr << e.what() << line << std::endl;
@@ -307,7 +303,7 @@ void BitcoinExchange::getAndCheckData(char *str) {
     int errorsFound = 0;
         
     try {
-        inputdatafile = openfile(DATABASE);
+        openfile(DATABASE, inputdatafile);
     }
     catch(std::exception &e) {
         std::cerr << e.what() << line << std::endl;
@@ -355,6 +351,8 @@ void BitcoinExchange::getAndCheckData(char *str) {
 void BitcoinExchange::cleanLine(std::string &line) {
     line.erase(std::remove(line.begin(), line.end(), ' '), line.end());
     std::replace(line.begin(), line.end(), '|', ',');
+
+    
     
 };
 
@@ -373,7 +371,7 @@ void BitcoinExchange::getInputFile(char *str) {
     unsigned int count = 0;
 
     try {
-        inputfile = openfile(str);
+        openfile(str, inputfile);
     }
     catch(std::exception &e) {
         std::cerr << e.what() << std::endl;

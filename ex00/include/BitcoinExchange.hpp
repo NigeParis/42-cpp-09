@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   BitcoinExchange.hpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nige42 <nige42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nrobinso <nrobinso@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 08:55:47 by nrobinso          #+#    #+#             */
-/*   Updated: 2025/05/02 10:59:53 by nige42           ###   ########.fr       */
+/*   Updated: 2025/05/16 12:22:58 by nrobinso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include <sstream> // Required for std::ostringstream in C++98
 #include <iomanip>
 #include <cstdlib> // for ssize_t on POSIX systems
+#include <algorithm>
 
 #define DATABASE "data.csv"
 #define RATELIMIT 16777216
