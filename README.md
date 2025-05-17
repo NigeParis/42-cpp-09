@@ -1,6 +1,6 @@
 #42-cpp-09
 
-# Bitcoin Exchange Project
+# Exercise 00: Bitcoin Exchange Project
 
 ## Overview
 This project calculates the value of a given amount of Bitcoin using historical exchange rates stored in a CSV file.
