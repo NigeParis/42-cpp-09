@@ -50,3 +50,16 @@ Example:
 
 Expression: "3 4 +" Standard notation: (3 + 4) RPN execution:
 
+Input: "3 4 + 2 *"
+Steps:
+1. Push `3`
+2. Push `4`
+3. Apply `+`: `3 + 4 = 7`, push `7`
+4. Push `2`
+5. Apply `*`: `7 * 2 = 14`
+Output: `14`
+
+Input: "5 1 2 + 4 * + 3 -"
+Result: `14`
+
+
