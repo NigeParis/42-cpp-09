@@ -13,3 +13,8 @@ This project calculates the value of a given amount of Bitcoin using historical 
 - **Database:** A CSV file containing historical exchange rates.
 
 ## Example Input (`input.txt`)
+2011-01-03 | 2 <br/>
+2012-01-11 | 1.5 <br/>
+2005-05-20 | 3 <br/>
+
+## Expected Output
