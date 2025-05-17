@@ -24,3 +24,26 @@ Error: No date for 2005-05-33 <br/>
 Error: not a positive number <br/>
 
 
+# **Exercise 01: Reverse Polish Notation (RPN) - C++ Module 09**
+
+## **Overview**
+Reverse Polish Notation (RPN) is a mathematical notation where operators follow their operands. Unlike standard notation, **RPN does not require parentheses**, making it efficient for evaluating expressions.
+
+This exercise focuses on implementing an RPN calculator using **C++ Standard Template Library (STL)**.
+
+---
+
+## **Objectives**
+- Implement an RPN calculator in **C++**.
+- Use **STL containers**, particularly `std::stack`, to process mathematical expressions.
+- Validate and execute operations correctly.
+
+---
+
+## **What is Reverse Polish Notation?**
+In RPN:
+- **Operands** are pushed onto a stack.
+- **Operators** pop the required number of operands and compute results.
+- The final result remains on the stack.
+
+Example:
