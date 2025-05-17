@@ -47,3 +47,6 @@ In RPN:
 - The final result remains on the stack.
 
 Example:
+
+Expression: "3 4 +" Standard notation: (3 + 4) RPN execution:
+
