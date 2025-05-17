@@ -59,9 +59,6 @@ Steps:
 5. Apply `*`: `7 * 2 = 14`
 Output: `14`
 
-Input: "5 1 2 + 4 * + 3 -"
-Result: `14`
-
 Key Takeaways
 
     Stacks are ideal for RPN evaluation.
