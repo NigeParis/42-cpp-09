@@ -115,3 +115,12 @@ int main() {
     mergeInsertionSort(data);
     for (int num : data) cout << num << " ";
 }
+```
+
+Key Takeaways
+
+    Hybrid sorting approach combining insertion sort and merge sort.
+
+    Efficient for small datasets, leveraging pairwise comparisons.
+
+    Use of STL containers to implement sorting algorithms in a structured manner.
