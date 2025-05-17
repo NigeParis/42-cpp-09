@@ -24,7 +24,7 @@ Error: No date for 2005-05-33 <br/>
 Error: not a positive number <br/>
 
 
-# **Exercise 01: Reverse Polish Notation (RPN) - C++ Module 09**
+# **Exercise 01: Reverse Polish Notation (RPN)**
 
 ## **Overview**
 Reverse Polish Notation (RPN) is a mathematical notation where operators follow their operands. Unlike standard notation, **RPN does not require parentheses**, making it efficient for evaluating expressions.
