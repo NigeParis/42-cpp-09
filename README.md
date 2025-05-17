@@ -67,7 +67,7 @@ Key Takeaways
 
     Error handling is crucial for invalid inputs.
 
-# **Exercise 02: PmergeMe - C++ Module 09**
+# **Exercise 02: PmergeMe**
 
 ## **Overview**
 PmergeMe is a project focused on implementing the **Merge-Insertion Sort algorithm**, a hybrid sorting method combining **merge sort** and **insertion sort** for optimized performance.
