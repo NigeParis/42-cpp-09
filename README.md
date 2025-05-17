@@ -62,4 +62,10 @@ Output: `14`
 Input: "5 1 2 + 4 * + 3 -"
 Result: `14`
 
+Key Takeaways
 
+    Stacks are ideal for RPN evaluation.
+
+    Expressions are processed left to right without needing parentheses.
+
+    Error handling is crucial for invalid inputs.
