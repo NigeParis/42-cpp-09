@@ -19,5 +19,5 @@ This project calculates the value of a given amount of Bitcoin using historical 
 
 ## Expected Output
 2011-01-03 => 1 = 10.00 <br/>
-2012-01-11 => 10.50 = 25 ,br/>
+2012-01-11 => 10.50 = 25 <br/>
 Error: No date for 2005-05-33 <br/>
