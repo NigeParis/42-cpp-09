@@ -66,3 +66,52 @@ Key Takeaways
     Expressions are processed left to right without needing parentheses.
 
     Error handling is crucial for invalid inputs.
+
+# **Exercise 02: PmergeMe - C++ Module 09**
+
+## **Overview**
+PmergeMe is a project focused on implementing the **Merge-Insertion Sort algorithm**, a hybrid sorting method combining **merge sort** and **insertion sort** for optimized performance.
+
+---
+
+## **Objectives**
+- Implement an efficient sorting algorithm using **C++ STL containers** (`vector`, `deque`).
+- Compare the sorting performance between different data structures.
+- Analyze and understand **time complexity** implications.
+
+---
+
+## **Algorithm Breakdown**
+### **Merge-Insertion Sort Steps**
+1. **Divide the Input** into small chunks.
+2. **Sort Small Groups** using **Insertion Sort**.
+3. **Merge Sorted Groups** efficiently using **Merge Sort**.
+
+This approach balances **speed** (due to insertion sort for small sets) and **efficiency** (due to merge sort for larger merges).
+
+---
+
+## **Example C++ Implementation**
+```cpp
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+void mergeInsertionSort(vector<int>& arr) {
+    if (arr.size() <= 1) return;
+    
+    // Split into pairs and sort using insertion
+    for (size_t i = 1; i < arr.size(); i += 2)
+        if (arr[i] < arr[i - 1]) swap(arr[i], arr[i - 1]);
+
+    // Apply merge logic
+    sort(arr.begin(), arr.end()); // Simplified for demonstration
+}
+
+int main() {
+    vector<int> data = {9, 3, 7, 1, 6, 4};
+    mergeInsertionSort(data);
+    for (int num : data) cout << num << " ";
+}
